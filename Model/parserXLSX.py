@@ -30,11 +30,12 @@ class ParserXLSX(object):
          for row in rows:
           for cell in row:
             if(first==True):
-              self.dic[cell]=[]
-              l.append(cell)
+              self.dic[cell.value]=[]
+              l.append(cell.value)
               
             else:
-              self.dic[l[k]].append(v)
+             
+              self.dic[l[k]].append(cell.value)
               k=k+1
          
           k=0
@@ -43,7 +44,9 @@ class ParserXLSX(object):
         
      
          itv.setDic(self.dic)
-         print(l)
+         
+
+         
          itv.setHeader(l)
 
 

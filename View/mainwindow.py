@@ -1,6 +1,6 @@
 
 
-from PyQt5.QtWidgets import QApplication, QWidget
+from PyQt5.QtWidgets import QApplication, QWidget,QMessageBox 
 
 from PyQt5.QtGui import QIcon
 
@@ -46,7 +46,7 @@ class MainWindow(QMainWindow):
         fileMenu = self.mainMenu.addMenu('Archivo')
 
         loadFile=  QAction(QIcon(), 'Cargar fichero', self)
-        loadFile.triggered.connect(self.lauchLoadFileWindow)
+        loadFile.triggered.connect(self.launchLoadFileWindow)
         fileMenu.addAction(loadFile)
 
 
@@ -63,8 +63,23 @@ class MainWindow(QMainWindow):
         fileMenu.addAction(exitButton)
  
     
-    def lauchLoadFileWindow(self):
+    def launchLoadFileWindow(self):
       
        loadFile = LoadFileWindow(self.mainController)
        loadFile.close()
-       self.tableView.createTable()
+       msg = QMessageBox()
+
+       msg.setIcon(QMessageBox.Warning)
+       msg.setWindowTitle("Error Fichero")
+       msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+
+       if(-1==loadFile.getFileErr()):
+            msg.setText("No es posible leer el fichero asegurese de que los datos son correctos")
+            msg.exec_()
+       elif(1==loadFile.getFileErr()):
+             msg.setText("Fichero con formato erroneo \n" +
+              "  introduzca un fichero con formato: .csv,.txt,.xlsx")
+             
+             msg.exec_()
+       else:
+         self.tableView.createTable()

@@ -1,11 +1,12 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog
+from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog,QMessageBox , QLineEdit, QFileDialog
 from PyQt5.QtGui import QIcon
  
 class LoadFileWindow(QWidget):
     mainController=None
     def __init__(self,controller):
         super().__init__()
+        self.errFile=0
         self.mainController=controller
         self.title = 'LoadFileWindow'
         self.left = 10
@@ -27,11 +28,10 @@ class LoadFileWindow(QWidget):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","All Files (*);;Python Files (*.py)", options=options)
-        self.mainController.loadFileTxt(fileName)
+        self.errFile=self.mainController.loadFileTxt(fileName)
+       
  
    
  
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    ex = LoadFileWindow()
-    sys.exit(app.exec_())
+    def getFileErr(self):
+        return self.errFile

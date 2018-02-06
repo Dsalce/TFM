@@ -23,19 +23,19 @@ class MainController(object):
         
 
     def loadFileTxt(self,file):
-        print(file)
+        
         try:
          if("TXT"in file.upper()):
           self.loadTxt.loadFile(file,self.itv)
          elif("CSV" in file.upper()):
           self.loadCSV.loadFile(file,self.itv)
-         elif("xlsx" in file.upper()):
+         elif("XLSX" in file.upper()):
           
           self.loadXLSX.loadFile(file,self.itv)
          else:
-          print("Fichero no soportado")
+          return 1
         except OSError:
-         print("Error en la carga del fichero")
+          return -1
 
     def ExportFileCsv(self,file):
        try:
