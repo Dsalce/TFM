@@ -6,6 +6,7 @@ import sys
 import string
 import numbers
 import time
+import statistics as stats
 
 
 class itv(object):
@@ -19,7 +20,25 @@ class itv(object):
 
 
 
+    def mediaAño(self,hMAtric,hDefec,atrib):
+      l=[]
+      lVal=[]
+      i=0
 
+      for año in  self.dic[hMAtric]:
+          
+          if(año[-4:]==atrib):
+            l.append(i)
+          i=i+1
+      i=0
+      for lDefect in self.dic[hDefec]:
+          print(lDefect)
+          if(i in l):
+            lVal.append(len(lDefect))
+
+          i=i+1
+    
+      return stats.mean(lVal)
 
 
 

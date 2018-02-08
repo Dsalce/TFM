@@ -4,7 +4,7 @@
 from View.mainwindow import *
 from Model.parserTXT import *
 from Model.parserCSV import *
-from Model.parserXLSX import *
+#from Model.parserXLSX import *
 from Model.itv import *
 import string
 
@@ -17,7 +17,7 @@ class MainController(object):
         self.itv=itv()
         self.loadCSV= ParserCSV()
         self.loadTxt = ParserTXT()
-        self.loadXLSX = ParserXLSX()
+        #self.loadXLSX = ParserXLSX()
         mainWindow = MainWindow(self)
         sys.exit(app.exec_())
         
@@ -29,9 +29,10 @@ class MainController(object):
           self.loadTxt.loadFile(file,self.itv)
          elif("CSV" in file.upper()):
           self.loadCSV.loadFile(file,self.itv)
-         elif("XLSX" in file.upper()):
+          self.itv.mediaAño("F.MATRIC.","DEFEC.","2004")
+         #elif("XLSX" in file.upper()):
           
-          self.loadXLSX.loadFile(file,self.itv)
+         # self.loadXLSX.loadFile(file,self.itv)
          else:
           return 1
         except OSError:
