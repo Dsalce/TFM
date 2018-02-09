@@ -26,6 +26,7 @@ class MainController(object):
         
         try:
          if("TXT"in file.upper()):
+         # self.loadTxt.encodeUtf8(file)
           self.loadTxt.loadFile(file,self.itv)
          elif("CSV" in file.upper()):
           self.loadCSV.loadFile(file,self.itv)

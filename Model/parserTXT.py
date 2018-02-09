@@ -6,6 +6,11 @@ import sys
 import string
 import numbers
 import time
+import codecs
+import os
+from chardet.universaldetector import UniversalDetector
+
+
 
 
 class ParserTXT(object):
@@ -13,25 +18,27 @@ class ParserTXT(object):
     headers=[]
 
     
-    def obtainHeaders (self,lines,indice):
+    def obtainHeaders (self,line,lineAnt):
       i=0
       dic_num={}
 
-      line=lines[indice-1]
-      ini=0
-      fin=0
-      num_dash=lines[indice].split()
+      
+      ini=1
+      fin=1
+      num_dash=line.split()
+      print(num_dash)
       while( i < len(num_dash)):
         fin=ini+num_dash[i].count('-')
-        value=line[ini:fin].strip()
+       
+        value=lineAnt[ini:fin].strip()
         dic_num[value]=num_dash[i].count('-')
-
+        
         self.dic[value]=[]
         self.headers.append(value)
         ini=fin+1
         i=i+1
-
-
+      
+      print(self.headers)  
       return dic_num
 
 
@@ -43,7 +50,7 @@ class ParserTXT(object):
 
 
               while (i < len(self.headers)) :
-
+               
                fin=ini+dic_num[self.headers[i]]
                value=line[ini:fin].strip()
                if(self.headers[i]=="DEFEC."):
@@ -57,45 +64,43 @@ class ParserTXT(object):
                i=i+1
 
         else:
-
-
                k=len(self.dic["DEFEC."])-1
-
                listDefec=self.dic["DEFEC."]
                listDefec[k].append(line.strip())
                self.dic["DEFEC."]=listDefec
 
+    def encodeUtf8(self,file):
+       #os.stat(file).st_size
+       with open(file, 'rb') as f:
+        for line in f:
+          print(repr(line))
+       
+          
+
+
     def loadFile(self,file,itv):
-
-     with open(file) as file:
-      fileName=file.name
-
-
-
-      lines=file.read().splitlines()
-
-
-
-
-      ini=0
-      j=0
-      listDefec=[]
-      header_ok=False
-      firstTime=True
-      while ( j  < len(lines)) :
+     
+     j=0    
+     listDefec=[]
+     header_ok=False
+     firstTime=True
+     lineAnt=""
+      
+     with open(file, 'rb') as file:
+       for line in file:
          
 
-         line=lines[j]
-
+         line=repr(line)  
+         
          if( len(line)>0):
            if("FECHA EMISION" in line):
                   header_ok=False
-           elif("---" in line and firstTime==False ):
+           elif("------" in line and firstTime==False ):
 
              header_ok=True
-           elif("---" in line and firstTime==True ):
+           elif("------" in line and firstTime==True ):
 
-             dic_num= self.obtainHeaders(lines,j)
+             dic_num= self.obtainHeaders(line,lineAnt)
              header_ok=True
              firstTime=False
 
@@ -103,10 +108,12 @@ class ParserTXT(object):
               self.readFile(line,dic_num,listDefec)
             
 
-
+         lineAnt=line
          j=j+1
-      itv.setDic(self.dic)
-      itv.setHeader(self.headers)
+
+
+     itv.setDic(self.dic)
+     itv.setHeader(self.headers)
        
 
 

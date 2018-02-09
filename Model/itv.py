@@ -37,7 +37,7 @@ class itv(object):
             lVal.append(len(lDefect))
 
           i=i+1
-    
+      
       return stats.mean(lVal)
 
 
