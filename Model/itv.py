@@ -16,11 +16,11 @@ class itv(object):
     def __init__(self):
       self.dic={}
       self.headers=[]
+      self.inspector={}
 
 
 
-
-    def mediaAño(self,hMAtric,hDefec,atrib):
+    def meanYear(self,hMAtric,hDefec,atrib):
       l=[]
       lVal=[]
       i=0
@@ -39,6 +39,9 @@ class itv(object):
           i=i+1
       
       return stats.mean(lVal)
+
+    def obtainInspector(self):
+       pass
 
 
 

@@ -32,8 +32,5 @@ class Parser(object):
              writer.writerow(dicAux)
              
             
-             i=i+1"""
+             i=i+1
            
-         
-           
-

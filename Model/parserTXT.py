@@ -8,7 +8,6 @@ import numbers
 import time
 import codecs
 import os
-from chardet.universaldetector import UniversalDetector
 
 from Model.parser import *
 
@@ -53,7 +52,7 @@ class ParserTXT(Parser):
         while (i < len(self.headers)) :
            fin=ini+dic_num[self.headers[i]]
            value=line[ini:fin].strip()
-        
+           
            if(value==""):
               whites=whites+1
            
@@ -67,10 +66,14 @@ class ParserTXT(Parser):
         while (i < len(self.headers)) :
            fin=ini+dic_num[self.headers[i]]
            value=line[ini:fin].strip()
-           if(whites>4):
+           #print("Inicio:"+str(ini)+"  Fin:"+str(fin ))
+           #print(value)
+
+           if(whites>5):
              if(value==""):
               self.dic[self.headers[i]].append(self.dic[self.headers[i]][len(self.dic[self.headers[i]])-1])
              else:
+
               self.dic[self.headers[i]].append(value)
 
            else:
@@ -93,9 +96,10 @@ class ParserTXT(Parser):
       for line in file:
          
         
-     
+         
          try:
-          line=str(line.decode('utf-8','ignore').encode("utf-8"),"utf-8")
+          line=str(line.decode('utf-8','replace').encode("utf-8"),"utf-8")
+    
           
           if( len(line.strip())>0):
 
