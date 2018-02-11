@@ -8,19 +8,18 @@ import numbers
 import time
 
 
-
-class ParserCSV(object):
-    dic={}
-
-    headers=[]
+from Model.parser import *
+class ParserCSV(Parser):
+    
     def __init__(self):
-      self.dic={}
-      self.headers=[]
+       Parser.__init__(self)
     
     
     
 
     def loadFile(self,file,itv):
+     
+
       i=0
       first=True
       

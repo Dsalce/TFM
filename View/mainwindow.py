@@ -21,8 +21,8 @@ class MainWindow(QMainWindow):
         self.title = 'MainWindow'
         self.left = 10
         self.top = 10
-        self.width = 1920
-        self.height = 1080
+        self.width = 920
+        self.height = 780
         self.initUI()
         
  
@@ -48,6 +48,10 @@ class MainWindow(QMainWindow):
         loadFile=  QAction(QIcon(), 'Cargar fichero', self)
         loadFile.triggered.connect(self.launchLoadFileWindow)
         fileMenu.addAction(loadFile)
+
+        exportFile=  QAction(QIcon(), 'Exportar fichero', self)
+        exportFile.triggered.connect(self.launchExportFileCSV)
+        fileMenu.addAction(exportFile)
 
 
 
@@ -83,3 +87,20 @@ class MainWindow(QMainWindow):
              msg.exec_()
        else:
          self.tableView.createTable()
+
+
+    def launchExportFileCSV(self):
+          msg = QMessageBox()
+          msg.setIcon(QMessageBox.Warning)
+          msg.setWindowTitle("Error Fichero")
+          msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+          exp=self.mainController.exportFileCSV()
+          if(exp==-1):
+              msg.setText("Error al exportar en CSV")
+              msg.exec_()
+
+          else:
+              msg.setText("Fichero exportado correctamente")
+              msg.exec_()
+    
+    

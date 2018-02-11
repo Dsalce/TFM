@@ -4,7 +4,8 @@
 from View.mainwindow import *
 from Model.parserTXT import *
 from Model.parserCSV import *
-#from Model.parserXLSX import *
+from Model.parser import *
+from Model.parserXLSX import *
 from Model.itv import *
 import string
 
@@ -12,12 +13,10 @@ class MainController(object):
    
     def __init__(self):
 
-
+        self.file=""
         app = QApplication(sys.argv)
         self.itv=itv()
-        self.loadCSV= ParserCSV()
-        self.loadTxt = ParserTXT()
-        #self.loadXLSX = ParserXLSX()
+        self.parser=Parser()
         mainWindow = MainWindow(self)
         sys.exit(app.exec_())
         
@@ -26,24 +25,35 @@ class MainController(object):
         
         try:
          if("TXT"in file.upper()):
-         # self.loadTxt.encodeUtf8(file)
-          self.loadTxt.loadFile(file,self.itv)
+          self.file=file
+          self.parser=ParserTXT()
+          self.parser.loadFile(file,self.itv)
          elif("CSV" in file.upper()):
-          self.loadCSV.loadFile(file,self.itv)
-          self.itv.mediaAño("F.MATRIC.","DEFEC.","2004")
-         #elif("XLSX" in file.upper()):
-          
-         # self.loadXLSX.loadFile(file,self.itv)
+          self.file=file
+          self.parser=ParserCSV()
+          self.parser.loadFile(file,self.itv)
+         
+         elif("XLSX" in file.upper()):
+          self.file=file
+          self.parser=ParserXLSX()
+          self.parser.loadFile(file,self.itv)
          else:
           return 1
         except OSError:
           return -1
 
-    def ExportFileCsv(self,file):
+    def exportFileCSV(self):
        try:
-        self.loadTxt.exportCSV("PITLRIDV[3392]")
+        if(self.file!=""):
+         self.parser.exportCSV(self.file)
+        else:
+          return -1 
        except OSError:
-        print("Error en la carga del fichero")
+        return -1
+
+
+
+
 
     def getHeader(self):
        return self.itv.getHeader()

@@ -5,20 +5,18 @@ import openpyxl
 import string
 
 
+from Model.parser import *
 
-
-class ParserXLSX(object):
-    dic={}
-
-    headers=[]
+class ParserXLSX(Parser):
+    
 
     def __init__(self):
-      self.dic={}
-      self.headers=[]
+       Parser.__init__(self)
     
     
 
     def loadFile(self,file,itv):
+         
       
          book = openpyxl.load_workbook(file)
          sheet = book.active
