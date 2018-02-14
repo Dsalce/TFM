@@ -66,11 +66,12 @@ class ParserTXT(Parser):
         while (i < len(self.headers)) :
            fin=ini+dic_num[self.headers[i]]
            value=line[ini:fin].strip()
-           #print("Inicio:"+str(ini)+"  Fin:"+str(fin ))
-           #print(value)
+           
 
            if(whites>5):
              if(value==""):
+              
+             
               self.dic[self.headers[i]].append(self.dic[self.headers[i]][len(self.dic[self.headers[i]])-1])
              else:
 
@@ -97,7 +98,7 @@ class ParserTXT(Parser):
          
         
          
-         try:
+        # try:
           line=str(line.decode('utf-8','replace').encode("utf-8"),"utf-8")
     
           
@@ -123,8 +124,8 @@ class ParserTXT(Parser):
           lineAnt=line
           j=j+1
          
-         except Exception:
-             print(line)
+        # except Exception:
+         #    print("Linea out:"+line)
         
 
       self.removePersonalData()

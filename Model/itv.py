@@ -8,6 +8,8 @@ import numbers
 import time
 import statistics as stats
 
+from Model.inspector import *
+
 
 class itv(object):
    
@@ -40,8 +42,29 @@ class itv(object):
       
       return stats.mean(lVal)
 
-    def obtainInspector(self):
-       pass
+    def calcDefectInspector(self,header,header1):
+       i=0
+       defect=self.dic[header1]
+       for ins in self.dic[header]:
+            if( ins not in list(self.dic.keys())):
+              self.inspector[ins]=Inspector(ins)
+              
+
+        
+            self.inspector[ins].addDefect(defect[i])
+            i=i+1
+
+       for ins in list(self.inspector.keys()):
+
+           self.inspector[ins].calcNumProp()
+
+       for ins in list(self.inspector.keys()):
+
+           print(ins)
+
+           self.inspector[ins].toString()
+
+
 
 
 

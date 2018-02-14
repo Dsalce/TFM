@@ -5,7 +5,7 @@ from View.mainwindow import *
 from Model.parserTXT import *
 from Model.parserCSV import *
 from Model.parser import *
-from Model.parserXLSX import *
+#from Model.parserXLSX import *
 from Model.itv import *
 import string
 
@@ -28,15 +28,17 @@ class MainController(object):
           self.file=file
           self.parser=ParserTXT()
           self.parser.loadFile(file,self.itv)
+          self.itv.calcDefectInspector("INS","DEFEC.")
          elif("CSV" in file.upper()):
           self.file=file
           self.parser=ParserCSV()
           self.parser.loadFile(file,self.itv)
+
          
          elif("XLSX" in file.upper()):
           self.file=file
-          self.parser=ParserXLSX()
-          self.parser.loadFile(file,self.itv)
+          #self.parser=ParserXLSX()
+          #self.parser.loadFile(file,self.itv)
          else:
           return 1
         except OSError:
