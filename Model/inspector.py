@@ -11,7 +11,7 @@ class Inspector(object):
 
 
   def __init__(self,id):
-
+       
        self.totalDefect=0
        self.propor={}
        self.defects={}
@@ -20,11 +20,11 @@ class Inspector(object):
 
 
   def addDefect(self,defect):
-    if(defect!=""):
-     if( defect not in list(self.defects.keys())):
-         self.defects[defect]=1
+     value=self.defects.get(defect)
+     if( value!=None):
+         self.defects[defect]=value+1
      else:
-        self.defects[defect]=self.defects[defect]+1
+         self.defects[defect]=1 
 
      self.totalDefect=self.totalDefect+1
 
@@ -38,9 +38,11 @@ class Inspector(object):
 
   def toString(self):
 
-    print(self.defects)
-    print(self.propor)
+    print(str(self.defects))
+    print(str(self.propor))
+    print(self.totalDefect)
 
+ def obtainTotalDefect(self):
 
-
+     return self.totalDefect
 

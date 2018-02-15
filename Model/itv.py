@@ -12,13 +12,14 @@ from Model.inspector import *
 
 
 class itv(object):
-   
+    import statistics as stats
        
     
     def __init__(self):
       self.dic={}
       self.headers=[]
       self.inspector={}
+      
 
 
 
@@ -44,25 +45,42 @@ class itv(object):
 
     def calcDefectInspector(self,header,header1):
        i=0
+       lMean=[]
        defect=self.dic[header1]
        for ins in self.dic[header]:
-            if( ins not in list(self.dic.keys())):
+
+            if( ins not in list(self.inspector.keys())):
+              print(ins)
               self.inspector[ins]=Inspector(ins)
               
 
-        
+            
             self.inspector[ins].addDefect(defect[i])
+            
             i=i+1
 
        for ins in list(self.inspector.keys()):
 
            self.inspector[ins].calcNumProp()
+           lMean.append(self.obtainTotalDefect())
 
        for ins in list(self.inspector.keys()):
 
-           print(ins)
+           print("Inspector:"+ins)
 
            self.inspector[ins].toString()
+
+       print(self.meanInspector())
+
+    def meanInspector(self):
+      
+       print(mean(lMean))
+            
+          
+
+
+
+
 
 
 

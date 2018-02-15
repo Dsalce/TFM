@@ -13,8 +13,7 @@ from Model.parser import *
 
 
 class ParserTXT(Parser):
-    dic={}
-    headers=[]
+    
 
     
     def obtainHeaders (self,line,lineAnt):
@@ -98,7 +97,7 @@ class ParserTXT(Parser):
          
         
          
-        # try:
+         try:
           line=str(line.decode('utf-8','replace').encode("utf-8"),"utf-8")
     
           
@@ -124,8 +123,8 @@ class ParserTXT(Parser):
           lineAnt=line
           j=j+1
          
-        # except Exception:
-         #    print("Linea out:"+line)
+         except Exception:
+             print("Linea out:"+line)
         
 
       self.removePersonalData()
