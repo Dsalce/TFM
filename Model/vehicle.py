@@ -6,23 +6,23 @@
 import csv
 import sys
 import string
-class Inspector(object):
+class Vehicle(object):
 
 
 
   def __init__(self,id):
        
        self.totalDefect=0
-       self.propor={}
        self.defects={}
+       self.propor={}
        self.id=id
 
 
 
   def addDefect(self,defect):
-    value=self.defects.get(defect)
-    
-     if( value!=None):
+   value=self.defects.get(defect)
+   if(defect!=""):
+     if( value!=None  ):
          self.defects[defect]=value+1
      else:
          self.defects[defect]=1 

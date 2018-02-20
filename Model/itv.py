@@ -9,7 +9,7 @@ import time
 import statistics as stats
 
 from Model.inspector import *
-
+from Model.vehicle import *
 
 class itv(object):
     import statistics as stats
@@ -19,7 +19,7 @@ class itv(object):
       self.dic={}
       self.headers=[]
       self.inspector={}
-      
+      self.vehicle={}
 
 
 
@@ -45,12 +45,12 @@ class itv(object):
 
     def calcDefectInspector(self,header,header1):
        i=0
-       lMean=[]
+       self.lMean=[]
        defect=self.dic[header1]
        for ins in self.dic[header]:
 
             if( ins not in list(self.inspector.keys())):
-              print(ins)
+             
               self.inspector[ins]=Inspector(ins)
               
 
@@ -62,7 +62,7 @@ class itv(object):
        for ins in list(self.inspector.keys()):
 
            self.inspector[ins].calcNumProp()
-           lMean.append(self.obtainTotalDefect())
+           self.lMean.append(self.inspector[ins].obtainTotalDefect())
 
        for ins in list(self.inspector.keys()):
 
@@ -74,9 +74,33 @@ class itv(object):
 
     def meanInspector(self):
       
-       print(mean(lMean))
+      return stats.mean(self.lMean)
+
+
             
-          
+    def calcDefectGrup(self,header,header1):
+       i=0
+      
+       defect=self.dic[header1]
+       for car in self.dic[header]:
+
+            if( car not in list(self.vehicle.keys())):
+             
+              self.vehicle[car]=Vehicle(car)
+              
+
+            
+            self.vehicle[car].addDefect(defect[i])
+            
+            i=i+1
+
+       
+       for car in list(self.vehicle.keys()):
+
+           print("Vehicle:"+car)
+
+           self.vehicle[car].toString()
+      
 
 
 
@@ -88,6 +112,7 @@ class itv(object):
 
     def setDic(self,dic):
       self.dic=dic
+
     def setHeader(self,header):
       self.headers=header
 

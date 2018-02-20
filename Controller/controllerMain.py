@@ -29,6 +29,7 @@ class MainController(object):
           self.parser=ParserTXT()
           self.parser.loadFile(file,self.itv)
           self.itv.calcDefectInspector("INS","DEFEC.")
+          self.itv.calcDefectGrup("GRUP","DEFEC.")
          elif("CSV" in file.upper()):
           self.file=file
           self.parser=ParserCSV()
