@@ -98,7 +98,7 @@ class ParserTXT(Parser):
         
          
          try:
-          line=str(line.decode('utf-8','replace').encode("utf-8"),"utf-8")
+          line=str(line.decode('utf-8','replace'))
     
           
           if( len(line.strip())>0):

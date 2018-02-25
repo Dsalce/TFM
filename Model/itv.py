@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*
 
 
-import csv
-import sys
-import string
-import numbers
-import time
+
 import statistics as stats
 
 from Model.inspector import *
 from Model.vehicle import *
+import collections
+
 
 class itv(object):
     import statistics as stats
@@ -64,17 +62,11 @@ class itv(object):
            self.inspector[ins].calcNumProp()
            self.lMean.append(self.inspector[ins].obtainTotalDefect())
 
-       for ins in list(self.inspector.keys()):
+       
 
-           print("Inspector:"+ins)
-
-           self.inspector[ins].toString()
-
-       print(self.meanInspector())
-
-    def meanInspector(self):
+    def meanInspector(self,ins):
       
-      return stats.mean(self.lMean)
+      return  self.inspector[ins].calcMean()
 
 
             
@@ -95,20 +87,29 @@ class itv(object):
             i=i+1
 
        
-       for car in list(self.vehicle.keys()):
-
-           print("Vehicle:"+car)
-
-           self.vehicle[car].toString()
+    
+    def countNumDefectVehicle(self):
+        data={}
+        for car in self.vehicle.values():
+            
+            if( car.obtainTotalDefect() not in list(data.keys())):
+                           data[car.obtainTotalDefect()]=1
+            else:
+                data[car.obtainTotalDefect()]=data[car.obtainTotalDefect()]+1
+    
       
+        od = collections.OrderedDict(sorted(data.items()))
+        return od
+        
 
 
 
 
 
+    def obtainInspectors(self):
+       return self.inspector
 
-
-
+    
 
     def setDic(self,dic):
       self.dic=dic

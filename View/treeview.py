@@ -1,46 +1,57 @@
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
+import sys
+
+class TreeView(QWidget):
+    def __init__(self,cTree):
+        super().__init__()
+        self.cTree=cTree
+        self.title = 'TreeView Defects'
+        self.left = 10
+        self.top = 10
+        self.width = 640
+        self.height = 480
  
-# ---------------------------------------------------------------------
-class MainWindow(QMainWindow):
-    def __init__(self, parent=None):
-        super().__init__(parent)
+        
+        self.initUI()
  
-        self.resize(520,300)
-        self.setWindowTitle("Treeview Example")
- 
-        self.treeview = QTreeView(self)
+    def initUI(self):
+        self.setWindowTitle(self.title)
+        self.setGeometry(self.left, self.top, self.width, self.height)
+        
+        
+        self.treeview = QTreeView()
 
  
-        model = QStandardItemModel(0, 4, parent)
-        model.setHeaderData(0, Qt.Horizontal, "Inspector")
-        model.setHeaderData(1, Qt.Horizontal, "Subject")
-        model.setHeaderData(2, Qt.Horizontal, "Num. Defectos")
+        model = QStandardItemModel(0, 4,None)
+        model.setHeaderData(0, Qt.Horizontal, "Inspector | Media")
+        model.setHeaderData(1, Qt.Horizontal, "Defecto")
+        model.setHeaderData(2, Qt.Horizontal, "Num. Defecto")
         model.setHeaderData(3, Qt.Horizontal, "Proporción")
         rootNode = model.invisibleRootItem()
-        for ins in range(10):
+        
+        inspectors=self.cTree.obtainInspectors()
+        for ins in inspectors.keys():
 
 
-          branch = QStandardItem("Branch 1")
-          for d  in range(10):
-              branch.appendRow([QStandardItem(""),QStandardItem("Child A"), None,None]) 
+          branch = QStandardItem(ins+ " | "+str(self.cTree.obtainMean(ins) ))
+          for k  in inspectors[ins].obtainDefects():
+              auxDefect=inspectors[ins].obtainValues(k)
+              
+              branch.appendRow([QStandardItem(""),QStandardItem(k), QStandardItem(str(auxDefect[0])),QStandardItem(str(auxDefect[1]))]) 
           
           rootNode.appendRow([ branch,None, None,None ])
         
-         
+          
         self.treeview.setModel(model)
         self.treeview.setColumnWidth(0, 150)
- 
-        self.setCentralWidget(self.treeview)
- 
+        mainLayout = QVBoxLayout()
+        mainLayout.addWidget(self.treeview)
+        self.setLayout(mainLayout)
+       
         self.treeview.setAlternatingRowColors(True)
-         
-# ---------------------------------------------------------------------
+        
+        self.show()
+
  
-if __name__ == '__main__':
-    import sys
-    app = QApplication(sys.argv)
-    w = MainWindow()
-    w.show()
-    sys.exit(app.exec_())

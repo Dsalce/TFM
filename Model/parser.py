@@ -1,7 +1,6 @@
 
 import csv
-import sys
-import string
+
 class Parser(object):
 
  def __init__(self):
@@ -26,8 +25,8 @@ class Parser(object):
            
            while(i < len(self.dic[self.headers[0]])):
              for h in self.headers:
-
-               dicAux[h]=self.dic[h][i];
+                 
+               dicAux[h]=str(self.dic[h][i].encode("utf-8")).replace("b'", "").replace("'", "")
 
              writer.writerow(dicAux)
              

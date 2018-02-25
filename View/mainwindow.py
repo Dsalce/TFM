@@ -7,16 +7,16 @@ from PyQt5.QtGui import QIcon
 
 from View.tables import *
 from View.loadfilewindow import *
+from View.treeview import *
+from View.histogram import *
 
 class MainWindow(QMainWindow):
 
-    tableView=None
-    mainMenu=None
-    mainController=None
-    loadFile=None
+    
 
-    def __init__(self, controller):
+    def __init__(self, controller,app):
         super().__init__()
+        self.app=app
         self.mainController=controller
         self.title = 'MainWindow'
         self.left = 10
@@ -56,10 +56,19 @@ class MainWindow(QMainWindow):
 
 
 
-        viewMenu = self.mainMenu.addMenu('View')
-        searchMenu = self.mainMenu.addMenu('Search')
-        toolsMenu = self.mainMenu.addMenu('Tools')
-        helpMenu = self.mainMenu.addMenu('Help')
+        treeViewMenu = self.mainMenu.addMenu('Defectos')
+        treeViewBotton=  QAction(QIcon(), 'Ver defectos', self)
+        treeViewBotton.triggered.connect(self.launchTreeView)
+        treeViewMenu.addAction(treeViewBotton)
+        
+        
+        
+        histoMenu = self.mainMenu.addMenu('Histogramas')
+        histoCarBotton=  QAction(QIcon(), 'Histograma Vehiculos', self)
+        histoCarBotton.triggered.connect(self.launchHistoView)
+        histoMenu.addAction(histoCarBotton)
+        
+        
  
         exitButton = QAction(QIcon('exit24.png'), 'Exit', self)
         exitButton.setStatusTip('Exit application')
@@ -76,8 +85,10 @@ class MainWindow(QMainWindow):
        msg.setIcon(QMessageBox.Warning)
        msg.setWindowTitle("Error Fichero")
        msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
-
-       if(-1==loadFile.getFileErr()):
+       if(0==loadFile.getFileErr()):
+           pass
+           
+       elif(-1==loadFile.getFileErr()):
             msg.setText("No es posible leer el fichero asegurese de que los datos son correctos")
             msg.exec_()
        elif(1==loadFile.getFileErr()):
@@ -102,5 +113,43 @@ class MainWindow(QMainWindow):
           else:
               msg.setText("Fichero exportado correctamente")
               msg.exec_()
-    
-    
+              
+    def launchTreeView(self):
+        
+
+        self.treeview = TreeView(self.mainController.obtainControllerTree())
+        self.treeview.show()
+          
+          
+          
+        
+    def launchHistoView (self):
+         
+        self.hist=Histogram(self.mainController)
+         
+         
+        
+         
+         
+        
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+          
+          
+          
+          

@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog,QMessageBox , QL
 from PyQt5.QtGui import QIcon
  
 class LoadFileWindow(QWidget):
-    mainController=None
+    
     def __init__(self,controller):
         super().__init__()
         self.errFile=0
