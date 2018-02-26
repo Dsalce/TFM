@@ -97,7 +97,7 @@ class itv(object):
             else:
                 data[car.obtainTotalDefect()]=data[car.obtainTotalDefect()]+1
     
-      
+        print(data)
         od = collections.OrderedDict(sorted(data.items()))
         return od
         

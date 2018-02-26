@@ -8,6 +8,11 @@ from PyQt5.QtGui import QIcon
  
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
+
+
+
+import numpy as np
+import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
 
 
@@ -29,16 +34,30 @@ class Histogram(QWidget):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
  
-        # m = PlotCanvas(None, 5, 4, 100,contro)
+        
         data =self.controller.obtainHisto()
         
         print(list(data.values()))
         print(list(data.keys()))
-        num_bins = 15
-        n, bins, patches = plt.hist(list(data.values()), num_bins, facecolor='red', alpha=0.5)
+        mu, sigma = 100, 15
+        x = mu + sigma *list(data.values())
+        
+        
+        n, bins, patches = plt.hist(x, 10, normed=1, facecolor='green', alpha=0.75)
+        y = mlab.normpdf( bins, mu, sigma)
+        l = plt.plot(bins, y, 'r--', linewidth=1)
+
+
+        plt.xlabel('Numero de defectos')
+        plt.ylabel('Numero de vehiculos')
+        plt.title(r'$\mathrm{Histogram\ of\ IQ:}\ \mu=100,\ \sigma=15$')
+        #plt.axis([0, 10000, 0, 30])
+        plt.grid(True)
         plt.show()
- 
-        self.show()
+
+
+        #m = PlotCanvas(None, 5, 4, 100,contro)
+        #self.show()
  
         
         
@@ -66,11 +85,7 @@ class PlotCanvas(FigureCanvas):
         data =self.controller.obtainHisto()
         ax = self.figure.add_subplot(111)
         ax.plot(list(data.values()), 'r-')
-        print(list(data.values()))
-        print(list(data.keys()))
-        num_bins = 15
-        n, bins, patches = plt.hist(list(data.values()), num_bins, facecolor='red', alpha=1)
-        plt.show()
+        
         self.draw()
         
         
