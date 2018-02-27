@@ -40,13 +40,16 @@ class Histogram(QWidget):
         print(list(data.values()))
         print(list(data.keys()))
         mu, sigma = 100, 15
-        x = mu + sigma *list(data.values())
+        
+        x = np.asarray(list(data.values()))
+        y=np.asarray(list(data.keys()))
         
         
-        n, bins, patches = plt.hist(x, 10, normed=1, facecolor='green', alpha=0.75)
-        y = mlab.normpdf( bins, mu, sigma)
-        l = plt.plot(bins, y, 'r--', linewidth=1)
-
+        n, bins, patches = plt.hist(np.asarray(list(data.values())), np.asarray(list(data.keys())),  facecolor='green')
+          # y = mlab.normpdf( bins, mu, sigma)
+          #l = plt.plot(bins, y, 'r--', linewidth=1)
+        plt.bar(x, height= x)
+        plt.xticks(x+.5, y);
 
         plt.xlabel('Numero de defectos')
         plt.ylabel('Numero de vehiculos')

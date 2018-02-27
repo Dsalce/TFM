@@ -125,7 +125,7 @@ class ParserTXT(Parser):
          
          except Exception:
              print("Linea out:"+line)
-      #self.changeDefect()
+      self.changeDefect()
         
 
       self.removePersonalData()
@@ -139,31 +139,35 @@ class ParserTXT(Parser):
      file.close()
 
     def changeDefect(self): 
+    
       self.headers.append("GRADO")
       self.dic["GRADO"]=[]
   
       i=0
       for d in self.dic["DEFEC."]:
-          print(d)
+          
           if(d.strip()!=""):
              grado=d[len(d)-1]
              if(grado=="G"):
                 grado="grave"
              elif(grado=="L"):
                 grado="leve"
+
              self.dic["GRADO"].append(grado)
              l = list(d)
-             p = l.index("-")
-             del(l[p+1])
-             del(l[p])
-             self.dic["DEFEC."][i]="".join(l)
-             
+             try: 
+              p = l.index("-")
+              del(l[p+1])
+              del(l[p])
+              self.dic["DEFEC."][i]="".join(l)
+             except Exception:
+                pass 
           else:
                self.dic["GRADO"].append("")
 
           i=i+1
 
-
+       
 
 
     def removePersonalData(self):
