@@ -44,7 +44,9 @@ class itv(object):
     def calcDefectInspector(self,header,header1):
        i=0
        self.lMean=[]
+       #Array de defectos
        defect=self.dic[header1]
+       grado=self.dic["GRADO"]
        for ins in self.dic[header]:
 
             if( ins not in list(self.inspector.keys())):
@@ -53,7 +55,7 @@ class itv(object):
               
 
             
-            self.inspector[ins].addDefect(defect[i])
+            self.inspector[ins].addDefect(defect[i]+"-"+grado[i])
             
             i=i+1
 
@@ -90,14 +92,26 @@ class itv(object):
     
     def countNumDefectVehicle(self):
         data={}
-        for car in self.vehicle.values():
+        aux={}
+        for k,car in self.vehicle.items():
             
             if( car.obtainTotalDefect() not in list(data.keys())):
                            data[car.obtainTotalDefect()]=1
+                           
             else:
                 data[car.obtainTotalDefect()]=data[car.obtainTotalDefect()]+1
+
+            if( k not in list(data.keys())):
+                           aux[car.obtainTotalDefect()]=k
+                           
+            else:
+                aux[car.obtainTotalDefect()].append(k)
+
     
+        print(aux)
+        print("\n")
         print(data)
+        print("\n")
         od = collections.OrderedDict(sorted(data.items()))
         return od
         
