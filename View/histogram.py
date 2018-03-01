@@ -39,23 +39,21 @@ class Histogram(QWidget):
         
         print(list(data.values()))
         print(list(data.keys()))
-        mu, sigma = 100, 15
-        
-        x = np.asarray(list(data.values()))
-        y=np.asarray(list(data.keys()))
         
         
-        n, bins, patches = plt.hist(x[0:10], normed=True, histtype='stepfilled', alpha=20)
-          # y = mlab.normpdf( bins, mu, sigma)
-          #l = plt.plot(bins, y, 'r--', linewidth=1)
-        #plt.bar(x[0:10], height= x[0:10])
-        #plt.xticks(x[0:10], y[0:10]);
-
+        x = list(data.values())
+        y=list(data.keys())
+        
+    
+        n, bins, patches = plt.hist(x[0:10],color="green")
+         
         plt.xlabel('Numero de defectos')
         plt.ylabel('Numero de vehiculos')
-        plt.title(r'$\mathrm{Histogram\ of\ IQ:}\ \mu=100,\ \sigma=15$')
+        
+        plt.xticks(range(0,10))
+        plt.yticks(range(0,15))
         #plt.axis([0, 10000, 0, 30])
-        plt.grid(True)
+        #plt.grid(True)
         plt.show()
 
 

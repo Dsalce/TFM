@@ -101,8 +101,9 @@ class itv(object):
             else:
                 data[car.obtainTotalDefect()]=data[car.obtainTotalDefect()]+1
 
-            if( k not in list(data.keys())):
-                           aux[car.obtainTotalDefect()]=k
+            if( car.obtainTotalDefect() not in list(aux.keys())):
+                           aux[car.obtainTotalDefect()]=[]
+                           aux[car.obtainTotalDefect()].append(k)
                            
             else:
                 aux[car.obtainTotalDefect()].append(k)
