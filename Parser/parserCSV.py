@@ -2,13 +2,14 @@
 
 
 import csv
-import sys
-import string
-import numbers
-import time
+
+import pandas as pd
+
+from Parser.parser import *
+
+import pandas as pd
 
 
-from Model.parser import *
 class ParserCSV(Parser):
     
     def __init__(self):
@@ -18,9 +19,13 @@ class ParserCSV(Parser):
     
 
     def loadFile(self,file,itv):
-     
-
-      i=0
+      df = pd.read_excel(file)
+      df = df.fillna(value="")
+      self.dic=df.to_dict('list')
+      itv.setDic(self.dic)
+      itv.setHeader(list(self.dic.keys()))
+      itv.setPandas(df)
+      """i=0
       first=True
       
      
@@ -41,7 +46,8 @@ class ParserCSV(Parser):
      
          itv.setDic(self.dic)
 
-         itv.setHeader(list(self.dic.keys()))
+         itv.setHeader(list(self.dic.keys()))"""
+         
 
 
    

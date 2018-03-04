@@ -1,15 +1,9 @@
 # -*- coding: utf-8 -*
 
 
-import csv
-import sys
-import string
-import numbers
-import time
-import codecs
-import os
 
-from Model.parser import *
+
+from Parser.parser import *
 
 
 class ParserTXT(Parser):
@@ -89,7 +83,7 @@ class ParserTXT(Parser):
      header_ok=False
      firstTime=True
      lineAnt=""
-     lineH=""
+     
      
       
      with open(file, 'rb') as file:
@@ -117,7 +111,7 @@ class ParserTXT(Parser):
 
            elif( header_ok == True):
               self.readFile(line,dic_num,listDefec)
-              bl=0
+            
             
           
           lineAnt=line

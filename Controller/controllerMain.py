@@ -2,10 +2,10 @@
 
 
 from View.mainwindow import *
-from Model.parserTXT import *
-from Model.parserCSV import *
-from Model.parser import *
-#from Model.parserXLSX import *
+from Parser.parserTXT import *
+from Parser.parserCSV import *
+from Parser.parser import *
+from Parser.parserXLSX import *
 from Model.itv import *
 from Controller.controllerTreeView import *
 
@@ -30,25 +30,17 @@ class MainController(object):
          
           self.file=file
           self.parser=ParserTXT()
-          self.parser.loadFile(file,self.itv)
-          self.itv.calcDefectInspector("INS","DEFEC.")
-          self.itv.calcDefectGrup("GRUP","DEFEC.")
-          
-          self.cTree.setModel(self.itv)
+          self.createModel(file)
+         
+         elif("XLSX" in file.upper()):
+          self.file=file
+          self.parser=ParserXLSX()
+          self.createModel(file)
           self.itv.countNumDefectVehicle()
          elif("CSV" in file.upper()):
           self.file=file
           self.parser=ParserCSV()
-          self.parser.loadFile(file,self.itv)
-          self.itv.calcDefectInspector("INS","DEFEC.")
-          self.itv.calcDefectGrup("GRUP","DEFEC.")
-          self.cTree.setModel(self.itv)
-          self.itv.countNumDefectVehicle()
-         elif("XLSX" in file.upper()):
-          self.file=file
-          #self.parser=ParserXLSX()
-          #self.parser.loadFile(file,self.itv)
-          self.cTree.setModel(self.itv)
+          self.createModel(file)
          elif(file==""):
              return 0
          else:
@@ -64,6 +56,13 @@ class MainController(object):
           return -1 
        except OSError:
         return -1
+    
+    def createModel(self,file):
+        self.parser.loadFile(file,self.itv)
+        self.itv.calcDefectInspector("INS","DEFEC.","GRADO")
+        self.itv.calcDefectGrup("GRUP","DEFEC.","GRADO")
+        self.cTree.setModel(self.itv)
+        self.itv.countNumDefectVehicle()
     
     def obtainControllerTree(self):
         return self.cTree

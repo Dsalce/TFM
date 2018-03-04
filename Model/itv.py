@@ -6,11 +6,13 @@ import statistics as stats
 
 from Model.inspector import *
 from Model.vehicle import *
+from Model.asociationRules import *
 import collections
 
 
+
 class itv(object):
-    import statistics as stats
+    
        
     
     def __init__(self):
@@ -18,7 +20,7 @@ class itv(object):
       self.headers=[]
       self.inspector={}
       self.vehicle={}
-
+      self.rule=Rules(None)
 
 
     def meanYear(self,hMAtric,hDefec,atrib):
@@ -41,13 +43,13 @@ class itv(object):
       
       return stats.mean(lVal)
 
-    def calcDefectInspector(self,header,header1):
+    def calcDefectInspector(self,headerIns,headerDefect,headerGrade):
        i=0
        self.lMean=[]
        #Array de defectos
-       defect=self.dic[header1]
-       grado=self.dic["GRADO"]
-       for ins in self.dic[header]:
+       defect=self.dic[headerDefect]
+       grado=self.dic[headerGrade]
+       for ins in self.dic[headerIns]:
 
             if( ins not in list(self.inspector.keys())):
              
@@ -55,7 +57,7 @@ class itv(object):
               
 
             
-            self.inspector[ins].addDefect(defect[i]+"-"+grado[i])
+            self.inspector[ins].addDefect(str(defect[i])+"-"+str(grado[i]))
             
             i=i+1
 
@@ -72,11 +74,12 @@ class itv(object):
 
 
             
-    def calcDefectGrup(self,header,header1):
+    def calcDefectGrup(self,headerGrup,headerDefect,headerGrade):
        i=0
       
-       defect=self.dic[header1]
-       for car in self.dic[header]:
+       defect=self.dic[headerDefect]
+       grado=self.dic[headerGrade]
+       for car in self.dic[headerGrup]:
 
             if( car not in list(self.vehicle.keys())):
              
@@ -84,7 +87,7 @@ class itv(object):
               
 
             
-            self.vehicle[car].addDefect(defect[i])
+            self.vehicle[car].addDefect(str(defect[i])+"-"+str(grado[i]))
             
             i=i+1
 
@@ -144,7 +147,9 @@ class itv(object):
 
     def lenHeader(self):
        return len(self.headers)
-
+    
+    def setPandas(self,pd):
+        self.rule.setPandas(pd)
 
 
 

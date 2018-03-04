@@ -2,10 +2,11 @@
 
 
 import openpyxl
-import string
+import pandas as pd
 
 
-from Model.parser import *
+
+from Parser.parser import *
 
 class ParserXLSX(Parser):
     
@@ -16,9 +17,15 @@ class ParserXLSX(Parser):
     
 
     def loadFile(self,file,itv):
+         df = pd.read_excel(file)
          
+         df = df.fillna(value="")
+         self.dic=df.to_dict('list')
+         itv.setDic(self.dic)
+         itv.setHeader(list(self.dic.keys()))
+         itv.setPandas(df)
       
-         book = openpyxl.load_workbook(file)
+         """book = openpyxl.load_workbook(file)
          sheet = book.active
 
          rows = sheet.rows
@@ -32,9 +39,11 @@ class ParserXLSX(Parser):
               l.append(cell.value)
               
             else:
-             
-              self.dic[l[k]].append(cell.value)
-              k=k+1
+             if(cell.value==None):
+                 self.dic[l[k]].append("")
+             else:
+              self.dic[l[k]].append(str(cell.value))
+             k=k+1
          
           k=0
           first=False
@@ -45,7 +54,8 @@ class ParserXLSX(Parser):
          
 
          
-         itv.setHeader(l)
+         itv.setHeader(l)"""
+         
 
 
    
