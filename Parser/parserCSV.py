@@ -19,12 +19,12 @@ class ParserCSV(Parser):
     
 
     def loadFile(self,file,itv):
-      df = pd.read_excel(file)
+      df = pd.read_csv(file)
       df = df.fillna(value="")
       self.dic=df.to_dict('list')
       itv.setDic(self.dic)
       itv.setHeader(list(self.dic.keys()))
-      itv.setPandas(df)
+      return df
       """i=0
       first=True
       

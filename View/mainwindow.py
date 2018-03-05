@@ -9,6 +9,7 @@ from View.tables import *
 from View.loadfilewindow import *
 from View.treeview import *
 from View.histogram import *
+from View.rulesTables import *
 
 class MainWindow(QMainWindow):
 
@@ -67,6 +68,12 @@ class MainWindow(QMainWindow):
         histoCarBotton=  QAction(QIcon(), 'Histograma Vehiculos', self)
         histoCarBotton.triggered.connect(self.launchHistoView)
         histoMenu.addAction(histoCarBotton)
+
+
+        ruleMenu = self.mainMenu.addMenu('Reglas de asociacion')
+        ruleBotton=  QAction(QIcon(), 'Reglas defecto', self)
+        ruleBotton.triggered.connect(self.launchHistoView)
+        ruleMenu.addAction(ruleBotton)
         
         
  
@@ -118,7 +125,7 @@ class MainWindow(QMainWindow):
         
 
         self.treeview = TreeView(self.mainController.obtainControllerTree())
-        self.treeview.show()
+        
           
           
           
@@ -126,6 +133,11 @@ class MainWindow(QMainWindow):
     def launchHistoView (self):
          
         self.hist=Histogram(self.mainController)
+
+
+    def launchHistoView (self):
+         
+        self.rule=RulesTableView(self.mainController.obtainControllerRule())
          
          
         

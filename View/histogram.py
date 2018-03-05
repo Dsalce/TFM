@@ -52,13 +52,11 @@ class Histogram(QWidget):
         
         plt.xticks(range(0,10))
         plt.yticks(range(0,15))
-        #plt.axis([0, 10000, 0, 30])
-        #plt.grid(True)
+      
         plt.show()
 
 
-        #m = PlotCanvas(None, 5, 4, 100,contro)
-        #self.show()
+   
  
         
         

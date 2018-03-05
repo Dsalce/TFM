@@ -6,7 +6,7 @@ import statistics as stats
 
 from Model.inspector import *
 from Model.vehicle import *
-from Model.asociationRules import *
+
 import collections
 
 
@@ -20,7 +20,7 @@ class itv(object):
       self.headers=[]
       self.inspector={}
       self.vehicle={}
-      self.rule=Rules(None)
+      self.rule=None
 
 
     def meanYear(self,hMAtric,hDefec,atrib):
@@ -149,7 +149,7 @@ class itv(object):
        return len(self.headers)
     
     def setPandas(self,pd):
-        self.rule.setPandas(pd)
+        self.rule=pd
 
 
 
