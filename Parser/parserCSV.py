@@ -7,7 +7,7 @@ import pandas as pd
 
 from Parser.parser import *
 
-import pandas as pd
+
 
 
 class ParserCSV(Parser):
