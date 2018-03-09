@@ -3,7 +3,7 @@
 
 import csv
 
-import pandas as pd
+
 
 from Parser.parser import *
 

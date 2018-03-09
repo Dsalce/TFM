@@ -11,9 +11,10 @@ class RulesController(object):
       
         
 
-      def getDataSet(self):
-
-          return self.rules.defectosDataSet()
+      def getGRUPDataSet(self,grupDefect):
+          
+          return self.rules.defectosGRUPDataSet(grupDefect)
       
       def setRules(self,rule):
+          
           self.rules.setPandas(rule)

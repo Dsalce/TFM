@@ -35,7 +35,7 @@ class TreeView(QWidget):
         for ins in inspectors.keys():
 
 
-          branch = QStandardItem(ins+ " | "+str(self.cTree.obtainMean(ins) ))
+          branch = QStandardItem(str(ins)+ " | "+str(self.cTree.obtainMean(ins) ))
           for k  in inspectors[ins].obtainDefects():
               auxDefect=inspectors[ins].obtainValues(k)
               

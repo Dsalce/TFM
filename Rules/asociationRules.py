@@ -14,17 +14,38 @@ class Rules(object):
   def __init__(self):
        self.df=None
        
-  def defectosDataSet(self):
-  	 
-     basket2 = (self.df.groupby(["DEFEC.", "INSPECCION"]))
-     #.sum().unstack().reset_index().fillna(0)
-     #.set_index("INSPECCION"))
-     print(basket2)
-  """basket_sets = basket2.applymap(encode_units)
-  	 basket_sets.drop('POSTAGE', inplace=True, axis=1)
-  	 frequent_itemsets = apriori(basket_sets, min_support=0.05, use_colnames=True)
-  	 rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1)"""
-  	 #return basket2
+
+  def encode_units(self,x):
+    if x <= 0:
+        return 0
+    if x >= 1:
+        return 1
+
+
+  def defectosGRUPDataSet(self,  typeCar):
+     self.df= self.df.astype('str')
+     basket_sets = (self.df[self.df["GRUP"]==str(typeCar)].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
+     
+     basket_sets = basket_sets.applymap(self.encode_units)
+     frequent_itemsets = apriori(basket_sets,min_support=0.05, use_colnames=True)
+     
+     rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1)
+     return rules
        
+
+  def defectosModelDataSet(self,modelCar):
+     
+     basket_sets = (self.df[self.df["MARCA Y MODELO"]==modelCar].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
+
+     basket_sets = basket_sets.applymap(encode_units)
+     frequent_itemsets = apriori(basket_sets,min_support=0.05, use_colnames=True)
+
+     rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1)
+     return rules
+
+
+
+
   def setPandas(self,df):
+
         self.df=df

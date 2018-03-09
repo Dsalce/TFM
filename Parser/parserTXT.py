@@ -125,12 +125,17 @@ class ParserTXT(Parser):
       self.removePersonalData()
       itv.setDic(self.dic)
       itv.setHeader(self.headers)
-       
+      file.close()
+      df=pd.DataFrame.from_dict(self.dic)
+      df = df.fillna(value="")
+      
+      
+      return df
+  
 
 
 
-
-     file.close()
+     
 
     def changeDefect(self): 
     

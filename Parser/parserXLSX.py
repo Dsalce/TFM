@@ -18,12 +18,10 @@ class ParserXLSX(Parser):
 
     def loadFile(self,file,itv):
          df = pd.read_excel(file)
-         
          df = df.fillna(value="")
          self.dic=df.to_dict('list')
          itv.setDic(self.dic)
          itv.setHeader(list(self.dic.keys()))
-         itv.setPandas(df)
          return df
          """book = openpyxl.load_workbook(file)
          sheet = book.active

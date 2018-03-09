@@ -64,8 +64,10 @@ class MainController(object):
         self.itv.calcDefectInspector("INS","DEFEC.","GRADO")
         self.itv.calcDefectGrup("GRUP","DEFEC.","GRADO")
         self.cTree.setModel(self.itv)
+        
         self.cRules.setRules(df)
         self.itv.countNumDefectVehicle()
+        self.itv.setPandas(df)
     
     def obtainControllerTree(self):
         return self.cTree

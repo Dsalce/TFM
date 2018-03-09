@@ -25,14 +25,13 @@ class RulesTableView(QWidget):
 
         self.rController=controller
         self.table = QTableView()
-        df=self.rController.getDataSet()
-        self.pandas= PandasModel(your_pandas_data)
+
+        df=self.rController.getGRUPDataSet(1000)
+        self.pandas= PandasModel(df)
+
         self.table.setModel(self.pandas)
 
         self.show()
-
-
-
 
 
 
@@ -48,16 +47,16 @@ class PandasModel(QAbstractTableModel):
         if role != Qt.DisplayRole:
             return QVariant()
 
-        if orientation == QtCore.Qt.Horizontal:
+        if orientation == Qt.Horizontal:
             try:
                 return self._df.columns.tolist()[section]
             except (IndexError, ):
-                return QtCore.QVariant()
+                return QVariant()
         elif orientation == Qt.Vertical:
             try:
                 return self._df.index.tolist()[section]
             except (IndexError, ):
-                return QtCore.QVariant()
+                return QVariant()
 
     def data(self, index, role=Qt.DisplayRole):
         if role != Qt.DisplayRole:

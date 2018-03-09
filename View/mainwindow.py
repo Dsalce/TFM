@@ -72,7 +72,7 @@ class MainWindow(QMainWindow):
 
         ruleMenu = self.mainMenu.addMenu('Reglas de asociacion')
         ruleBotton=  QAction(QIcon(), 'Reglas defecto', self)
-        ruleBotton.triggered.connect(self.launchHistoView)
+        ruleBotton.triggered.connect(self.launchAsocView)
         ruleMenu.addAction(ruleBotton)
         
         
@@ -135,7 +135,7 @@ class MainWindow(QMainWindow):
         self.hist=Histogram(self.mainController)
 
 
-    def launchHistoView (self):
+    def launchAsocView (self):
          
         self.rule=RulesTableView(self.mainController.obtainControllerRule())
          
