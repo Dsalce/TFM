@@ -12,7 +12,7 @@ class RulesTableView(QWidget):
 
     def __init__(self,controller):
         super().__init__()
-        self.title = 'Histograma Defectos Vehiculo'
+        self.title = 'Reglas de asociacion'
         self.left = 10
         self.top = 10
         self.width = 640
@@ -25,70 +25,65 @@ class RulesTableView(QWidget):
 
         self.rController=controller
         self.table = QTableView()
+        self.table.setColumnWidth(0, 120)
+        self.table.setColumnWidth(1, 120)
 
-        df=self.rController.getGRUPDataSet(1000)
-        self.pandas= PandasModel(df)
+        self.rButton = QPushButton("R.Asociacion")
+        self.cb = QComboBox()
+        if(self.rController!=None):
+         self.cb.addItems(self.rController.obtainGrup())
+         self.rButton.clicked.connect(self.populateTable)
+        mainLayout = QGridLayout()
+        mainLayout.setSpacing(10)
+   
 
-        self.table.setModel(self.pandas)
+        mainLayout.addWidget(self.cb,1,0)
+        mainLayout.addWidget(self.rButton,1,1)
 
+        mainLayout.addWidget(self.table)
+        self.setLayout(mainLayout)
+       
+        self.table.setAlternatingRowColors(True)
+       
         self.show()
 
 
+     
+    def populateTable(self):
+        df=self.rController.getGRUPDataSet( self.cb.currentText().strip())
+        
+        self.pandas= PandasModel(df)
+        
+        self.table.setModel(self.pandas)
+        self.table.update()
 
-class PandasModel(QAbstractTableModel): 
 
 
 
-    def __init__(self, df = pd.DataFrame(), parent=None): 
-        QAbstractTableModel.__init__(self, parent=parent)
-        self._df = df
+class PandasModel(QAbstractTableModel):
+    
+    def __init__(self, data, parent=None):
+        QAbstractTableModel.__init__(self, parent)
+        self._data = data
 
-    def headerData(self, section, orientation, role=Qt.DisplayRole):
-        if role != Qt.DisplayRole:
-            return QVariant()
+    def rowCount(self, parent=None):
+        return len(self._data.values)
 
-        if orientation == Qt.Horizontal:
-            try:
-                return self._df.columns.tolist()[section]
-            except (IndexError, ):
-                return QVariant()
-        elif orientation == Qt.Vertical:
-            try:
-                return self._df.index.tolist()[section]
-            except (IndexError, ):
-                return QVariant()
+    def columnCount(self, parent=None):
+        return self._data.columns.size
 
     def data(self, index, role=Qt.DisplayRole):
-        if role != Qt.DisplayRole:
-            return QVariant()
+        if index.isValid():
+            if role == Qt.DisplayRole:
+               if( isinstance(self._data.values[index.row()][index.column()], float)) :
+                   return str(self._data.values[index.row()][index.column()])
+               else :
+                  return str(list(self._data.values[index.row()][index.column()]))
+        return None
+    def getData(self):
+       return self._data
 
-        if not index.isValid():
-            return QVariant()
-
-        return QVariant(str(self._df.ix[index.row(), index.column()]))
-
-    def setData(self, index, value, role):
-        row = self._df.index[index.row()]
-        col = self._df.columns[index.column()]
-        if hasattr(value, 'toPyObject'):
-            value = value.toPyObject()
-        else:
-            
-            dtype = self._df[col].dtype
-            if dtype != object:
-                value = None if value == '' else dtype.type(value)
-        self._df.set_value(row, col, value)
-        return True
-
-    def rowCount(self, parent=QModelIndex()): 
-        return len(self._df.index)
-
-    def columnCount(self, parent=QModelIndex()): 
-        return len(self._df.columns)
-
-    def sort(self, column, order):
-        colname = self._df.columns.tolist()[column]
-        self.layoutAboutToBeChanged.emit()
-        self._df.sort_values(colname, ascending= order == Qt.AscendingOrder, inplace=True)
-        self._df.reset_index(inplace=True, drop=True)
-        self.layoutChanged.emit()
+    def headerData(self, col, orientation, role):
+        if orientation == Qt.Horizontal and role == Qt.DisplayRole:
+            return self._data.columns[col]
+        return None

@@ -17,9 +17,9 @@ class MainController(object):
         self.file=""
         app = QApplication(sys.argv)
         self.itv=itv()
-        self.cTree=TreeViewController()
-        self.cRules=RulesController()
         self.parser=Parser()
+        self.cTree=None
+        self.cRules=None
         mainWindow = MainWindow(self,app)
         sys.exit(app.exec_())
         
@@ -61,13 +61,16 @@ class MainController(object):
     
     def createModel(self,file):
         df=self.parser.loadFile(file,self.itv)
+        df= df.astype('str')
         self.itv.calcDefectInspector("INS","DEFEC.","GRADO")
-        self.itv.calcDefectGrup("GRUP","DEFEC.","GRADO")
+        self.itv.calcDefectGrup("INSPECCION","GRUP","DEFEC.","GRADO")
+        self.cTree=TreeViewController()
+        self.cRules=RulesController()
         self.cTree.setModel(self.itv)
-        
         self.cRules.setRules(df)
-        self.itv.countNumDefectVehicle()
         self.itv.setPandas(df)
+        
+        
     
     def obtainControllerTree(self):
         return self.cTree
@@ -75,8 +78,8 @@ class MainController(object):
     def obtainControllerRule(self):
         return self.cRules
 
-    def obtainHisto(self):
-        return self.itv.countNumDefectVehicle()
+    def obtainHisto(self,grup):
+        return self.itv.countNumDefectVehicle(grup)
 
     def getHeader(self):
        return self.itv.getHeader()

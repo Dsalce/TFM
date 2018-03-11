@@ -18,3 +18,6 @@ class RulesController(object):
       def setRules(self,rule):
           
           self.rules.setPandas(rule)
+
+      def obtainGrup(self):
+      	return self.rules.obtainGrup()

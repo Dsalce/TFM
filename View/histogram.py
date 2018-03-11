@@ -35,7 +35,7 @@ class Histogram(QWidget):
         self.setGeometry(self.left, self.top, self.width, self.height)
  
         
-        data =self.controller.obtainHisto()
+        data =self.controller.obtainHisto("1000")
         
         print(list(data.values()))
         print(list(data.keys()))

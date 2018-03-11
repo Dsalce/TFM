@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QAction, QTableW
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSlot,Qt,QPoint
 
-#from View.filter import *
+
  
 class TableView(QTableWidget):
 
@@ -129,12 +129,7 @@ class TableView(QTableWidget):
         
         self.menu = QMenu(self)
         self.col = index
-
-
-        scroll=QScrollBar(Qt.Vertical,None)
-        scrollAction = QWidgetAction(self.menu)
-        scrollAction.setDefaultWidget(scroll)
-        self.menu.addAction(scrollAction)
+        
 
 
        
@@ -169,8 +164,7 @@ class TableView(QTableWidget):
         posX = headerPos.x() + self.horizontalHeader().sectionPosition(index)
         self.menu.exec_(QPoint(posX, posY))
        
-        #self.menu.setGeometry(posX,posY,100,50)
-        #self.menu.show()
+        
  
     
  

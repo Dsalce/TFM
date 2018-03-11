@@ -8,6 +8,7 @@ from Model.inspector import *
 from Model.vehicle import *
 
 import collections
+import pandas as pd
 
 
 
@@ -74,11 +75,12 @@ class itv(object):
 
 
             
-    def calcDefectGrup(self,headerGrup,headerDefect,headerGrade):
+    def calcDefectGrup(self,headerInspection,headerGrup,headerDefect,headerGrade):
        i=0
       
        defect=self.dic[headerDefect]
        grado=self.dic[headerGrade]
+       inspec=self.dic[headerInspection]
        for car in self.dic[headerGrup]:
 
             if( car not in list(self.vehicle.keys())):
@@ -88,35 +90,15 @@ class itv(object):
 
             
             self.vehicle[car].addDefect(str(defect[i])+"-"+str(grado[i]))
-            
+            self.vehicle[car].addInspection(str(inspec[i]),str(defect[i]))
             i=i+1
 
        
     
-    def countNumDefectVehicle(self):
-        data={}
-        aux={}
-        for k,car in self.vehicle.items():
-            
-            if( car.obtainTotalDefect() not in list(data.keys())):
-                           data[car.obtainTotalDefect()]=1
-                           
-            else:
-                data[car.obtainTotalDefect()]=data[car.obtainTotalDefect()]+1
-
-            if( car.obtainTotalDefect() not in list(aux.keys())):
-                           aux[car.obtainTotalDefect()]=[]
-                           aux[car.obtainTotalDefect()].append(k)
-                           
-            else:
-                aux[car.obtainTotalDefect()].append(k)
-
-    
-        print(aux)
-        print("\n")
-        print(data)
-        print("\n")
-        od = collections.OrderedDict(sorted(data.items()))
+    def countNumDefectVehicle(self,grup):
+        print(list(self.vehicle.keys()))
+        print(self.vehicle[grup].obtainNumInspection())
+        od = collections.OrderedDict(sorted(self.vehicle[grup].obtainNumInspection().items()))
         return od
         
 
@@ -149,7 +131,7 @@ class itv(object):
        return len(self.headers)
     
     def setPandas(self,pd):
-        self.rule=pd
+        self.df=pd
 
 
 

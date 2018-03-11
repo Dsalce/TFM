@@ -21,9 +21,13 @@ class Rules(object):
     if x >= 1:
         return 1
 
+  def obtainGrup(self):
+    
+     return list(pd.unique(self.df["GRUP"]))
+
 
   def defectosGRUPDataSet(self,  typeCar):
-     self.df= self.df.astype('str')
+     
      basket_sets = (self.df[self.df["GRUP"]==str(typeCar)].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
      
      basket_sets = basket_sets.applymap(self.encode_units)

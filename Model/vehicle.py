@@ -16,6 +16,28 @@ class Vehicle(object):
        self.defects={}
        self.propor={}
        self.id=id
+       self.inspeccion={}
+
+  def addInspection(self,inspec,defect):
+   value=self.inspeccion.get(inspec)
+   if(defect==""):
+     self.inspeccion[inspec]=0
+   else: 
+     if( value!=None  ):
+         self.defects[defect]=value+1
+     else:
+         self.defects[defect]=1 
+
+      
+  def obtainNumInspection(self):
+     data={}
+     for v in self.inspeccion.values():
+        if( v not in list(self.inspeccion.keys())):
+                data[v]=0
+     
+        data[v]=data[v]+1
+     return data
+
 
 
 

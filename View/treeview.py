@@ -22,7 +22,7 @@ class TreeView(QWidget):
         
         
         self.treeview = QTreeView()
-
+        
  
         model = QStandardItemModel(0, 4,None)
         model.setHeaderData(0, Qt.Horizontal, "Inspector | Media")
@@ -30,9 +30,9 @@ class TreeView(QWidget):
         model.setHeaderData(2, Qt.Horizontal, "Num. Defecto")
         model.setHeaderData(3, Qt.Horizontal, "Proporción")
         rootNode = model.invisibleRootItem()
-        
-        inspectors=self.cTree.obtainInspectors()
-        for ins in inspectors.keys():
+        if(self.cTree!=None):
+         inspectors=self.cTree.obtainInspectors()
+         for ins in inspectors.keys():
 
 
           branch = QStandardItem(str(ins)+ " | "+str(self.cTree.obtainMean(ins) ))
