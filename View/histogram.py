@@ -35,7 +35,7 @@ class Histogram(QWidget):
         self.setGeometry(self.left, self.top, self.width, self.height)
  
         
-        data =self.controller.obtainHisto("1000")
+        data =self.controller.obtainHisto(1000)
         
         print(list(data.values()))
         print(list(data.keys()))
@@ -45,13 +45,17 @@ class Histogram(QWidget):
         y=list(data.keys())
         
     
-        n, bins, patches = plt.hist(x[0:10],color="green")
+        #n, bins, patches = plt.hist(x,color="green",linewidth=1)
+
+        bar_width = 1.0
+        plt.bar(x,x, bar_width,  color="green")
+        plt.xticks(x, y) # labels get centered
+
          
         plt.xlabel('Numero de defectos')
         plt.ylabel('Numero de vehiculos')
         
-        plt.xticks(range(0,10))
-        plt.yticks(range(0,15))
+        
       
         plt.show()
 

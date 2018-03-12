@@ -99,6 +99,7 @@ class itv(object):
         print(list(self.vehicle.keys()))
         print(self.vehicle[grup].obtainNumInspection())
         od = collections.OrderedDict(sorted(self.vehicle[grup].obtainNumInspection().items()))
+        print(od)
         return od
         
 
