@@ -43,14 +43,15 @@ class Histogram(QWidget):
         
         x = list(data.values())
         y=list(data.keys())
-        
+        index=np.arange(len(x))
     
         #n, bins, patches = plt.hist(x,color="green",linewidth=1)
 
         bar_width = 1.0
-        plt.bar(x,x, bar_width,  color="green")
-        plt.xticks(x, y) # labels get centered
-
+        plt.bar(index, x, bar_width,
+                 color='b')
+        plt.xticks(index , y) # labels get centered
+        plt.yticks( index,x)
          
         plt.xlabel('Numero de defectos')
         plt.ylabel('Numero de vehiculos')
