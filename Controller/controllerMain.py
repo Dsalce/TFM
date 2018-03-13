@@ -80,6 +80,9 @@ class MainController(object):
 
     def obtainHisto(self,grup):
         return self.itv.countNumDefectVehicle(grup)
+    def obtainGRUPS(self):
+       return self.itv.obtainGRUP()
+
 
     def getHeader(self):
        return self.itv.getHeader()

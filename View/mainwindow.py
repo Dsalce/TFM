@@ -69,6 +69,7 @@ class MainWindow(QMainWindow):
         histoCarBotton.triggered.connect(self.launchHistoView)
         histoMenu.addAction(histoCarBotton)
 
+        
 
         ruleMenu = self.mainMenu.addMenu('Reglas de asociacion')
         ruleBotton=  QAction(QIcon(), 'Reglas defecto', self)
@@ -131,7 +132,7 @@ class MainWindow(QMainWindow):
           
         
     def launchHistoView (self):
-         
+        
         self.hist=Histogram(self.mainController)
 
 

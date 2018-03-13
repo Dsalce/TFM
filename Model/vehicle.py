@@ -34,9 +34,9 @@ class Vehicle(object):
      data={}
      for v in self.inspeccion.values():
         if( v not in list(data.keys())):
-                data[v]=str(0)
+                data[v]=0
      
-        data[v]=str(int(data[v])+1)
+        data[v]=int(data[v])+1
      return data
 
 

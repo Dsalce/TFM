@@ -22,8 +22,8 @@ class Rules(object):
         return 1
 
   def obtainGrup(self):
-    
-     return list(pd.unique(self.df["GRUP"]))
+   
+     return sorted(list(pd.unique(self.df["GRUP"])))
 
 
   def defectosGRUPDataSet(self,  typeCar):

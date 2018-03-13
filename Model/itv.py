@@ -96,14 +96,17 @@ class itv(object):
        
     
     def countNumDefectVehicle(self,grup):
-        print(list(self.vehicle.keys()))
-        print(self.vehicle[grup].obtainNumInspection())
-        od = collections.OrderedDict(sorted(self.vehicle[grup].obtainNumInspection().items()))
-        print(od)
-        return od
         
-
-
+        return collections.OrderedDict(sorted(self.vehicle[int(grup)].obtainNumInspection().items()))
+        
+         
+        
+    def obtainGRUP(self):
+      if(len(self.dic)==0):
+       return None
+      else:
+       return sorted(list(set(self.dic["GRUP"])))
+  
 
 
 
