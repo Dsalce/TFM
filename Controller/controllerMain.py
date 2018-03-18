@@ -1,4 +1,7 @@
+"""
+Main class controller of the  main window
 
+"""
 
 
 from View.mainwindow import *
@@ -12,21 +15,25 @@ from Controller.controllerRules import *
 
 class MainController(object):
    
+    #Constructor
     def __init__(self):
 
         self.file=""
+        #launch the view in the application
         app = QApplication(sys.argv)
         self.itv=itv()
         self.parser=Parser()
         self.cTree=None
         self.cRules=None
+        #Instance of the main window
         mainWindow = MainWindow(self,app)
         sys.exit(app.exec_())
         
-
+    #Function to load the type of file that the user select
     def loadFileTxt(self,file):
         self.itv=itv()
         try:
+
          if("TXT"in file.upper()):
          
           self.file=file
@@ -50,6 +57,7 @@ class MainController(object):
         except OSError:
           return -1
 
+    #Call a function to export the table to a .csv file
     def exportFileCSV(self):
        try:
         if(self.file!=""):
@@ -59,11 +67,13 @@ class MainController(object):
        except OSError:
         return -1
     
+    #Create all the data structure after the file is load
     def createModel(self,file):
         df=self.parser.loadFile(file,self.itv)
-        df= df.astype('str')
+        df= df.astype('str')#Change all the dataset to string
         self.itv.calcDefectInspector("INS","DEFEC.","GRADO")
         self.itv.calcDefectGrup("INSPECCION","GRUP","DEFEC.","GRADO")
+        #Controller instance
         self.cTree=TreeViewController()
         self.cRules=RulesController()
         self.cTree.setModel(self.itv)
@@ -71,24 +81,29 @@ class MainController(object):
         self.itv.setPandas(df)
         
         
-    
+    #Obtain the ControllerTreeview instance
     def obtainControllerTree(self):
         return self.cTree
 
+    #Obtain the ControllerRule instance
     def obtainControllerRule(self):
         return self.cRules
-
+    #Obtain the number of vehicle per number of defects
     def obtainHisto(self,grup):
         return self.itv.countNumDefectVehicle(grup)
+    #Obtain the list of grups
     def obtainGRUPS(self):
        return self.itv.obtainGRUP()
 
-
+    #Gets the header
     def getHeader(self):
        return self.itv.getHeader()
+    #Gets the dictionary   
     def getDic(self):
        return self.itv.getDic()
+    #Gets the length header
     def lenHeader(self):
        return self.itv.lenHeader()
+    #Gets the length dictionary
     def lenDic(self):
        return self.itv.lenDic()

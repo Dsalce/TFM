@@ -1,15 +1,20 @@
 # -*- coding: utf-8 -*
 
+"""
+Class to import .txt
 
+
+"""
 
 
 from Parser.parser import *
 
 
 class ParserTXT(Parser):
-    
-
-    
+    #Constructor
+    def __init__(self):
+      Parser.__init__(self)
+    #Method to obtain the headers count the number of dash
     def obtainHeaders (self,line,lineAnt):
       i=0
       dic_num={}
@@ -17,13 +22,13 @@ class ParserTXT(Parser):
       
       ini=0
       fin=0
-      num_dash=line.split()
+      num_dash=line.split()#Split the line
      
       while( i < len(num_dash)):
-        fin=ini+num_dash[i].count('-')
+        fin=ini+num_dash[i].count('-')#Count dash in segment
         
         value=lineAnt[ini:fin]
-        dic_num[value]=num_dash[i].count('-')
+        dic_num[value]=num_dash[i].count('-')#save the number of dash
         
         self.dic[value]=[]
         self.headers.append(value)
@@ -34,7 +39,7 @@ class ParserTXT(Parser):
 
 
   
-
+    #Parser a new line
     def readFile(self,line,dic_num,listDefec):
 
       
@@ -42,6 +47,7 @@ class ParserTXT(Parser):
         ini=0
         fin=0
         whites=0
+        #count the number of variable empty
         while (i < len(self.headers)) :
            fin=ini+dic_num[self.headers[i]]
            value=line[ini:fin].strip()
@@ -55,12 +61,12 @@ class ParserTXT(Parser):
         i=0
         ini=0
         fin=0
-       
+        #populate the dictionary and parser the line
         while (i < len(self.headers)) :
            fin=ini+dic_num[self.headers[i]]
            value=line[ini:fin].strip()
            
-
+           
            if(whites>5):
              if(value==""):
               
@@ -75,7 +81,8 @@ class ParserTXT(Parser):
 
            ini=fin+1
            i=i+1
-
+   
+    #main method to parse the file
     def loadFile(self,file,itv):
      
      j=0    
@@ -92,11 +99,12 @@ class ParserTXT(Parser):
         
          
          try:
+          #encode the line to utf8
           line=str(line.decode('utf-8','replace'))
     
           
           if( len(line.strip())>0):
-
+           #Control line
            if("FECHA EMISION" in line.upper() or "ESTACION" in line.upper()):
                   header_ok=False
            elif("------" in line and firstTime==False ):
@@ -136,7 +144,7 @@ class ParserTXT(Parser):
 
 
      
-
+    #Change the columns of defects
     def changeDefect(self): 
     
       self.headers.append("GRADO")
@@ -168,7 +176,7 @@ class ParserTXT(Parser):
 
        
 
-
+    #Remove the columns with personal data LOPD ... very important
     def removePersonalData(self):
         
         for header in self.headers:
@@ -189,8 +197,7 @@ class ParserTXT(Parser):
 
 
 
-    def __init__(self):
-      Parser.__init__(self)
+    
          
    
 

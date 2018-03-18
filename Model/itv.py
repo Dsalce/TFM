@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*
 
+"""
+Principal model that interact with the MainController class
 
+
+"""
 
 import statistics as stats
 
@@ -15,7 +19,7 @@ import pandas as pd
 class itv(object):
     
        
-    
+    #Constructor
     def __init__(self):
       self.dic={}
       self.headers=[]
@@ -23,7 +27,7 @@ class itv(object):
       self.vehicle={}
       self.rule=None
 
-
+    #Mean per year
     def meanYear(self,hMAtric,hDefec,atrib):
       l=[]
       lVal=[]
@@ -44,12 +48,13 @@ class itv(object):
       
       return stats.mean(lVal)
 
+    #Calculate and populate the defect of the class of inspector
     def calcDefectInspector(self,headerIns,headerDefect,headerGrade):
        i=0
        self.lMean=[]
-       #Array de defectos
        defect=self.dic[headerDefect]
        grado=self.dic[headerGrade]
+       #Populate inspector class
        for ins in self.dic[headerIns]:
 
             if( ins not in list(self.inspector.keys())):
@@ -61,20 +66,20 @@ class itv(object):
             self.inspector[ins].addDefect(str(defect[i])+"-"+str(grado[i]))
             
             i=i+1
-
+       #Calculate mean and proportion
        for ins in list(self.inspector.keys()):
 
            self.inspector[ins].calcNumProp()
            self.lMean.append(self.inspector[ins].obtainTotalDefect())
 
        
-
+    #Return mean of the inspector passed by parameter
     def meanInspector(self,ins):
       
       return  self.inspector[ins].calcMean()
 
 
-            
+    #Calculate and populate the defect of the class of vehicle
     def calcDefectGrup(self,headerInspection,headerGrup,headerDefect,headerGrade):
        i=0
       
@@ -94,13 +99,13 @@ class itv(object):
             i=i+1
 
        
-    
+    #Return an ordered dictionary of number of defect per number of vehicles
     def countNumDefectVehicle(self,grup):
         
         return collections.OrderedDict(sorted(self.vehicle[int(grup)].obtainNumInspection().items()))
         
          
-        
+    #Obtain the list of GRUP    
     def obtainGRUP(self):
       if(len(self.dic)==0):
        return None
@@ -109,31 +114,31 @@ class itv(object):
   
 
 
-
+    #Obtain the dictionary of inspectors
     def obtainInspectors(self):
        return self.inspector
 
     
-
+    #set dictionary
     def setDic(self,dic):
       self.dic=dic
-
+    #Set  the headers
     def setHeader(self,header):
       self.headers=header
 
-
+    #Get the headers
     def getHeader(self):
        return self.headers
-
+    #get dictionary
     def getDic(self):
        return self.dic
-
+    #get length dictionary
     def lenDic(self):
        return len(self.dic[self.headers[0]])
-
+    #get length header
     def lenHeader(self):
        return len(self.headers)
-    
+    #set dataset
     def setPandas(self,pd):
         self.df=pd
 

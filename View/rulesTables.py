@@ -10,14 +10,14 @@ import pandas as pd
  
 class RulesTableView(QWidget):
 
-    def __init__(self,controller):
+    def __init__(self,controller,header):
         super().__init__()
         self.title = 'Reglas de asociacion'
         self.left = 10
         self.top = 10
         self.width = 640
         self.height = 480
-        
+        self.head=header
         
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
@@ -31,7 +31,7 @@ class RulesTableView(QWidget):
         self.rButton = QPushButton("R.Asociacion")
         self.cb = QComboBox()
         if(self.rController!=None):
-         self.cb.addItems(self.rController.obtainGrup())
+         self.cb.addItems(self.rController.obtainListHeader(self.head))
          self.rButton.clicked.connect(self.populateTable)
         mainLayout = QGridLayout()
         mainLayout.setSpacing(10)
@@ -50,7 +50,8 @@ class RulesTableView(QWidget):
 
      
     def populateTable(self):
-        df=self.rController.getGRUPDataSet( self.cb.currentText().strip())
+
+        df=self.rController.getDataSet( self.cb.currentText().strip(),self.head)
         
         self.pandas= PandasModel(df)
         

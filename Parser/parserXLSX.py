@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*
 
+"""
+Class to import .xlsx
+"""
 
 import openpyxl
 import pandas as pd
@@ -10,16 +13,16 @@ from Parser.parser import *
 
 class ParserXLSX(Parser):
     
-
+    #Constructor
     def __init__(self):
        Parser.__init__(self)
     
     
-
+    #Load .xlsx file
     def loadFile(self,file,itv):
          df = pd.read_excel(file)
-         df = df.fillna(value="")
-         self.dic=df.to_dict('list')
+         df = df.fillna(value="")#remove empty values
+         self.dic=df.to_dict('list')#transform columns into to list
          itv.setDic(self.dic)
          itv.setHeader(list(self.dic.keys()))
          return df

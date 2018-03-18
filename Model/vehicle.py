@@ -1,4 +1,6 @@
-
+"""
+Class Model of vehicle
+"""
 
 
 
@@ -9,15 +11,16 @@ import string
 class Vehicle(object):
 
 
-
+  #Constructor
   def __init__(self,id):
        
        self.totalDefect=0
        self.defects={}
-       self.propor={}
        self.id=id
        self.inspeccion={}
 
+
+  #Add a new inspection
   def addInspection(self,inspec,defect):
    value=self.inspeccion.get(inspec)
    if(defect==""):
@@ -29,7 +32,7 @@ class Vehicle(object):
          self.inspeccion[inspec]=1 
 
 
-      
+  #Obtain the number of defect per inspection
   def obtainNumInspection(self):
      data={}
      for v in self.inspeccion.values():
@@ -41,7 +44,7 @@ class Vehicle(object):
 
 
 
-
+  #Add a new defect to the dictionary
   def addDefect(self,defect):
    value=self.defects.get(defect)
    if(defect!=""):
@@ -52,20 +55,8 @@ class Vehicle(object):
 
      self.totalDefect=self.totalDefect+1
 
-
-  def  calcNumProp(self):
-        
-
-        for defe in list(self.defects.keys()):
-        	self.propor[defe]=self.defects[defe]/self.totalDefect
-
-
-  def toString(self):
-
-    print(str(self.defects))
-    print(str(self.propor))
-    print(self.totalDefect)
-
+ 
+  #Obtain the total of  defect
   def obtainTotalDefect(self):
 
      return self.totalDefect

@@ -5,6 +5,9 @@
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QAction, QTableWidget,QTableWidgetItem,QVBoxLayout,QMenu,QCheckBox,QWidgetAction,QDialogButtonBox,QScrollBar,QPushButton
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSlot,Qt,QPoint
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
 
 
  
@@ -18,16 +21,6 @@ class TableView(QTableWidget):
         self.horizontalHeader().sectionClicked.connect(self.on_view_horizontalHeader_sectionClicked)
         
  
-    
-     
- 
-        
-    
- 
-
-
-
-
 
     def createTable(self):
        # Create table
@@ -87,12 +80,13 @@ class TableView(QTableWidget):
     def slotSelect(self, state):
 
         for checkbox in self.checkBoxs:
-            checkbox.setChecked(Qt.Checked == state)
+            checkbox.setCheckState(Qt.Checked == state)
 
     def menuClose(self):
         self.keywords[self.col] = []
         for element in self.checkBoxs:
-            if element.isChecked():
+            #if element.isChecked():
+            if element.checkState() == Qt.Checked:
                 self.keywords[self.col].append(element.text())
         self.filterdata()
         self.menu.close()
@@ -101,33 +95,48 @@ class TableView(QTableWidget):
     def createCheckBoxes(self):
          #Create checkbox
         data_unique = []
+        
+        self.table=QTableWidget()
+
+        self.table.setColumnCount(1)
+        self.table.verticalHeader().hide()
+        self.table.horizontalHeader().hide()
+        self.table.horizontalHeader().setStretchLastSection(True)
+        self.table.setRowCount(self.rowCount())
+       
+       
 
         self.checkBoxs = []
         checkBox = QCheckBox("Select all", self.menu)
+        
         checkableAction = QWidgetAction(self.menu)
         checkableAction.setDefaultWidget(checkBox)
         self.menu.addAction(checkableAction)
         checkBox.setChecked(True)
         checkBox.stateChanged.connect(self.slotSelect)
-        
-        #Array of checkboxes
+        j=0
         for i in range(self.rowCount()):
-            if not self.isRowHidden(i):
+           # if not self.isRowHidden(i):
                 item = self.item(i, self.col )
                 if item.text() not in data_unique:
                     data_unique.append(item.text())
-                    checkBox = QCheckBox(item.text(), self.menu)
-                    checkBox.setChecked(True)
-                    checkableAction = QWidgetAction(self.menu)
-                    checkableAction.setDefaultWidget(checkBox)
-                    self.menu.addAction(checkableAction)
-                    self.checkBoxs.append(checkBox)
+                    
+                    it = QTableWidgetItem(item.text())
+                    it.setFlags(Qt.ItemIsUserCheckable |Qt.ItemIsEnabled)
+                    it.setCheckState(Qt.Checked)
+                    self.table.setItem(j,0, it)
+                    self.checkBoxs.append(it)
+                    j=j+1
 
-
+        self.table.setRowCount(len(self.checkBoxs))
+        checkableAction = QWidgetAction(self.menu)
+        checkableAction.setDefaultWidget(self.table)
+        self.menu.addAction(checkableAction)
 
     def on_view_horizontalHeader_sectionClicked(self, index):
         
         self.menu = QMenu(self)
+       
         self.col = index
         
 
@@ -169,4 +178,3 @@ class TableView(QTableWidget):
     
  
 
-        

@@ -72,10 +72,12 @@ class MainWindow(QMainWindow):
         
 
         ruleMenu = self.mainMenu.addMenu('Reglas de asociacion')
-        ruleBotton=  QAction(QIcon(), 'Reglas defecto', self)
-        ruleBotton.triggered.connect(self.launchAsocView)
-        ruleMenu.addAction(ruleBotton)
-        
+        ruleGRUPBotton=  QAction(QIcon(), 'Reglas  GRUP', self)
+        ruleMARCABotton=  QAction(QIcon(), 'Reglas  MARCA Y MODELO', self)
+        ruleGRUPBotton.triggered.connect(self.launchAsocGRUPView)
+        ruleMARCABotton.triggered.connect(self.launchAsocMARCAView)
+        ruleMenu.addAction(ruleGRUPBotton)
+        ruleMenu.addAction(ruleMARCABotton)
         
  
         exitButton = QAction(QIcon('exit24.png'), 'Exit', self)
@@ -136,10 +138,14 @@ class MainWindow(QMainWindow):
         self.hist=Histogram(self.mainController)
 
 
-    def launchAsocView (self):
+    def launchAsocGRUPView (self):
          
-        self.rule=RulesTableView(self.mainController.obtainControllerRule())
+        self.rule=RulesTableView(self.mainController.obtainControllerRule(),"GRUP")
          
+
+    def launchAsocMARCAView (self):
+         
+        self.rule=RulesTableView(self.mainController.obtainControllerRule(),"MARCA Y MODELO")
          
         
          

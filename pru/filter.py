@@ -1,117 +1,175 @@
-import csv
-import sys
-from PyQt4 import QtCore
-
-from PyQt4 import QtGui
 
 
-class Widget(QtGui.QWidget):
-    def __init__(self, parent=None):
-        super(Widget, self).__init__(parent=parent)
-        self.verticalLayout = QtGui.QVBoxLayout(self)
-        self.filterall = QtGui.QTableWidget(self)
-        self.filterall.setColumnCount(0)
-        self.filterall.setRowCount(0)
-        self.verticalLayout.addWidget(self.filterall)
 
-        self.loadAll()
-        self.horizontalHeader = self.filterall.horizontalHeader()
-        self.horizontalHeader.sectionClicked.connect(self.on_view_horizontalHeader_sectionClicked)
-        self.keywords = dict([(i, []) for i in range(self.filterall.columnCount())])
-        self.checkBoxs = []
-        self.col = None
+
+from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QAction, QTableWidget,QTableWidgetItem,QVBoxLayout,QMenu,QCheckBox,QWidgetAction,QDialogButtonBox,QScrollBar,QPushButton
+from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import pyqtSlot,Qt,QPoint
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
+
+
+ 
+class TableView(QTableWidget):
+
+    mainController=None
+    def __init__(self,controller):
+        super().__init__()
+        self.mainController=controller
+        
+        self.horizontalHeader().sectionClicked.connect(self.on_view_horizontalHeader_sectionClicked)
+        
+ 
+
+    def createTable(self):
+       # Create table
+      
+        headers=self.mainController.getHeader()
+        dic=self.mainController.getDic()
+        self.columns =headers
+        
+        self.setRowCount(self.mainController.lenDic())
+        self.setColumnCount(self.mainController.lenHeader())
+        k=0
+        for h in headers:
+          
+            self.setHorizontalHeaderItem(k,  QTableWidgetItem(h));
+            k=k +1
+
+
+        i=0
+        j=0
+        while(i < self.mainController.lenDic()):
+            for h in headers:
+             
+              self.setItem(i,j, QTableWidgetItem(str(dic[h][i])))
+              j=j+1
+            i=i+1
+            j=0
+
+        self.keywords = dict([(i, []) for i in range(self.columnCount())])
+
+
+        
+       
+    
+        
+    def clearFilter(self):
+        for i in range(self.rowCount()):
+            self.setRowHidden(i, False)
+
+        self.menu.close()
+
+        
+
+
+    def filterdata(self):
+
+        columnsShow = dict([(i, True) for i in range(self.rowCount())])
+
+        for i in range(self.rowCount()):
+            for j in range(self.columnCount()):
+                item = self.item(i, j)
+                if self.keywords[j]:
+                    if item.text() not in self.keywords[j]:
+                        columnsShow[i] = False
+        for key, value in columnsShow.items():
+            self.setRowHidden(key, not value)
 
     def slotSelect(self, state):
 
         for checkbox in self.checkBoxs:
-            checkbox.setChecked(QtCore.Qt.Checked == state)
-
-    def on_view_horizontalHeader_sectionClicked(self, index):
-        # self.clearFilter()
-        self.menu = QtGui.QMenu(self)
-        self.col = index
-
-        data_unique = []
-
-        self.checkBoxs = []
-
-        checkBox = QtGui.QCheckBox("Select all", self.menu)
-        checkableAction = QtGui.QWidgetAction(self.menu)
-        checkableAction.setDefaultWidget(checkBox)
-        self.menu.addAction(checkableAction)
-        checkBox.setChecked(True)
-        checkBox.stateChanged.connect(self.slotSelect)
-
-        for i in range(self.filterall.rowCount()):
-            if not self.filterall.isRowHidden(i):
-                item = self.filterall.item(i, index)
-                if item.text() not in data_unique:
-                    data_unique.append(item.text())
-                    checkBox = QtGui.QCheckBox(item.text(), self.menu)
-                    checkBox.setChecked(True)
-                    checkableAction = QtGui.QWidgetAction(self.menu)
-                    checkableAction.setDefaultWidget(checkBox)
-                    self.menu.addAction(checkableAction)
-                    self.checkBoxs.append(checkBox)
-
-        btn = QtGui.QDialogButtonBox(QtGui.QDialogButtonBox.Ok | QtGui.QDialogButtonBox.Cancel,
-                                     QtCore.Qt.Horizontal, self.menu)
-        btn.accepted.connect(self.menuClose)
-        btn.rejected.connect(self.menu.close)
-        checkableAction = QtGui.QWidgetAction(self.menu)
-        checkableAction.setDefaultWidget(btn)
-        self.menu.addAction(checkableAction)
-
-        headerPos = self.filterall.mapToGlobal(self.horizontalHeader.pos())
-
-        posY = headerPos.y() + self.horizontalHeader.height()
-        posX = headerPos.x() + self.horizontalHeader.sectionPosition(index)
-        self.menu.exec_(QtCore.QPoint(posX, posY))
+            checkbox.setChecked(Qt.Checked == state)
 
     def menuClose(self):
         self.keywords[self.col] = []
         for element in self.checkBoxs:
-            if element.isChecked():
+            #if element.isChecked():
+            if element.checkState() == Qt.Checked:
                 self.keywords[self.col].append(element.text())
         self.filterdata()
         self.menu.close()
 
-    def loadAll(self):
-        with open("PITLRIDV[3392].csv", "rb") as inpfil:
-            reader = csv.reader(inpfil, delimiter=',')
-            csheader = reader.next()
-            ncol = len(csheader)
-            data = list(reader)
-            row_count = len(data)
 
-            self.filterall.setRowCount(row_count)
-            self.filterall.setColumnCount(ncol)
-            self.filterall.setHorizontalHeaderLabels(QtCore.QString('%s' % ', '.join(map(str, csheader))).split(","))
+    def createCheckBoxes(self):
+         #Create checkbox
+        data_unique = []
+      
+        
+       
+       
+       
 
-            for ii in range(0, row_count):
-                mainins = data[ii]
-                for var in range(0, ncol):
-                    self.filterall.setItem(ii, var, QtGui.QTableWidgetItem(mainins[var]))
+        self.checkBoxs = []
+        checkBox = QCheckBox("Select all", self.menu)
+        
+        checkableAction = QWidgetAction(self.menu)
+        checkableAction.setDefaultWidget(checkBox)
+        self.menu.addAction(checkableAction)
+        checkBox.setChecked(True)
+        checkBox.stateChanged.connect(self.slotSelect)
+        j=0
+        for i in range(self.rowCount()):
+            if not self.isRowHidden(i):
+                item = self.item(i, self.col )
+                if item.text() not in data_unique:
+                    data_unique.append(item.text())
+                    checkBox = QCheckBox(item.text(), self.menu)
+                    checkBox.setChecked(True)
+                    
+                    checkableAction = QWidgetAction(self.menu)
+                    checkableAction.setDefaultWidget(checkBox)
+                    self.menu.addAction(checkableAction)
+                    self.checkBoxs.append(checkBox)
+                    j=j+1
 
-    def clearFilter(self):
-        for i in range(self.filterall.rowCount()):
-            self.filterall.setRowHidden(i, False)
+                    
+        
 
-    def filterdata(self):
+    def on_view_horizontalHeader_sectionClicked(self, index):
+        
+        self.menu = QMenu(self)
+        
+        self.menu.setStyleSheet("QMenu { menu-scrollable: 1; }")
+        self.col = index
+        
 
-        columnsShow = dict([(i, True) for i in range(self.filterall.rowCount())])
 
-        for i in range(self.filterall.rowCount()):
-            for j in range(self.filterall.columnCount()):
-                item = self.filterall.item(i, j)
-                if self.keywords[j]:
-                    if item.text() not in self.keywords[j]:
-                        columnsShow[i] = False
-        for key, value in columnsShow.iteritems():
-            self.filterall.setRowHidden(key, not value)
+       
+        self.createCheckBoxes()
 
-if __name__ == '__main__':
-    app = QtGui.QApplication(sys.argv)
-    w = Widget()
-    w.show()
-    sys.exit(app.exec_())
+        
+        #Accept and cancel button
+        btn = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel,
+                                     Qt.Horizontal, self.menu)
+        btn.accepted.connect(self.menuClose)
+        btn.rejected.connect(self.menu.close)
+        checkableAction = QWidgetAction(self.menu)
+        checkableAction.setDefaultWidget(btn)
+        self.menu.addAction(checkableAction)
+
+        ##Clear Button
+        btnClr = QPushButton(QIcon(),"Limpiar Filtro", self.menu)
+        btnClr.clicked.connect(self.clearFilter)
+        checkableAction = QWidgetAction(self.menu)
+        checkableAction.setDefaultWidget(btnClr)
+        self.menu.addAction(checkableAction)
+
+
+
+
+
+
+
+        headerPos = self.mapToGlobal(self.horizontalHeader().pos())
+
+        posY = headerPos.y() + self.horizontalHeader().height()
+        posX = headerPos.x() + self.horizontalHeader().sectionPosition(index)
+        self.menu.exec_(QPoint(posX, posY))
+       
+        
+ 
+    
+ 
+

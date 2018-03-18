@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*
-
+"""
+Class to import .csv
+"""
 
 import csv
 
@@ -11,17 +13,17 @@ from Parser.parser import *
 
 
 class ParserCSV(Parser):
-    
+    #Constructor
     def __init__(self):
        Parser.__init__(self)
     
     
     
-
+    #Load .csv file
     def loadFile(self,file,itv):
       df = pd.read_csv(file)
-      df = df.fillna(value="")
-      self.dic=df.to_dict('list')
+      df = df.fillna(value="")#remove empty values
+      self.dic=df.to_dict('list')#transform columns into to list
       itv.setDic(self.dic)
       itv.setHeader(list(self.dic.keys()))
       return df
