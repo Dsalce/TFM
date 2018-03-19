@@ -74,10 +74,13 @@ class MainWindow(QMainWindow):
         ruleMenu = self.mainMenu.addMenu('Reglas de asociacion')
         ruleGRUPBotton=  QAction(QIcon(), 'Reglas  GRUP', self)
         ruleMARCABotton=  QAction(QIcon(), 'Reglas  MARCA Y MODELO', self)
+        ruleCATBotton=  QAction(QIcon(), 'Reglas  CAT', self)
+        ruleCATBotton.triggered.connect(self.launchAsocCATView)
         ruleGRUPBotton.triggered.connect(self.launchAsocGRUPView)
         ruleMARCABotton.triggered.connect(self.launchAsocMARCAView)
         ruleMenu.addAction(ruleGRUPBotton)
         ruleMenu.addAction(ruleMARCABotton)
+        ruleMenu.addAction(ruleCATBotton)
         
  
         exitButton = QAction(QIcon('exit24.png'), 'Exit', self)
@@ -93,7 +96,7 @@ class MainWindow(QMainWindow):
        msg = QMessageBox()
 
        msg.setIcon(QMessageBox.Warning)
-       msg.setWindowTitle("Error Fichero")
+       #msg.setWindowTitle("Error Fichero")
        msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
        if(0==loadFile.getFileErr()):
            pass
@@ -146,6 +149,10 @@ class MainWindow(QMainWindow):
     def launchAsocMARCAView (self):
          
         self.rule=RulesTableView(self.mainController.obtainControllerRule(),"MARCA Y MODELO")
+
+    def launchAsocCATView (self):
+         
+        self.rule=RulesTableView(self.mainController.obtainControllerRule(),"CAT.")
          
         
          

@@ -71,6 +71,7 @@ class MainController(object):
     def createModel(self,file):
         df=self.parser.loadFile(file,self.itv)
         df= df.astype('str')#Change all the dataset to string
+        df.columns =df.columns.str.strip()
         self.itv.calcDefectInspector("INS","DEFEC.","GRADO")
         self.itv.calcDefectGrup("INSPECCION","GRUP","DEFEC.","GRADO")
         #Controller instance

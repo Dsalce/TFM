@@ -26,8 +26,8 @@ class Rules(object):
         return 1
   #Obtain the list of the header
   def obtainListHeader(self,header):
-   
-     return sorted(list(pd.unique(self.df[header])))
+
+     return sorted(list(pd.unique(self.df[header.strip()])))
 
   
 
@@ -46,6 +46,16 @@ class Rules(object):
   def defectosModelDataSet(self,modelCar):
      
      basket_sets = (self.df[self.df["MARCA Y MODELO"]==modelCar].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
+
+     basket_sets = basket_sets.applymap(self.encode_units)
+     frequent_itemsets = apriori(basket_sets,min_support=0.05, use_colnames=True)
+
+     rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1)
+     return rules
+  #Obtain association rule to model 
+  def defectosCATDataSet(self,modelCar):
+     
+     basket_sets = (self.df[self.df["CAT."]==modelCar].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
 
      basket_sets = basket_sets.applymap(self.encode_units)
      frequent_itemsets = apriori(basket_sets,min_support=0.05, use_colnames=True)

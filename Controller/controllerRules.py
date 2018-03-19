@@ -20,6 +20,8 @@ class RulesController(object):
           return self.rules.defectosGRUPDataSet(grupDefect)
          elif(header=="MARCA Y MODELO"):
           return self.rules.defectosModelDataSet(grupDefect)
+         elif(header=="CAT."):
+          return self.rules.defectosCATDataSet(grupDefect)
 
       #Set the dataset
       def setRules(self,rule):
