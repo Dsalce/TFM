@@ -23,6 +23,8 @@ class ParserCSV(Parser):
     def loadFile(self,file,itv):
       df = pd.read_csv(file)
       df = df.fillna(value="")#remove empty values
+      df= df.astype('str')#Change all the dataset to string
+      df.columns =df.columns.str.strip()
       self.dic=df.to_dict('list')#transform columns into to list
       itv.setDic(self.dic)
       itv.setHeader(list(self.dic.keys()))

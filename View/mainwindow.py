@@ -65,9 +65,17 @@ class MainWindow(QMainWindow):
         
         
         histoMenu = self.mainMenu.addMenu('Histogramas')
-        histoCarBotton=  QAction(QIcon(), 'Histograma Vehiculos', self)
-        histoCarBotton.triggered.connect(self.launchHistoView)
-        histoMenu.addAction(histoCarBotton)
+        histoMARCABotton=  QAction(QIcon(), 'Histograma Model', self)
+        histoGRUPBotton=  QAction(QIcon(), 'Histograma GRUP', self)
+        histoCATBotton=  QAction(QIcon(), 'Histograma CAT', self)
+        histoCATBotton.triggered.connect(self.launchHistoCATView)
+        histoGRUPBotton.triggered.connect(self.launchHistoGRUPView)
+        histoMARCABotton.triggered.connect(self.launchHistoMARCAView)
+        histoMenu.addAction(histoMARCABotton)
+        histoMenu.addAction(histoGRUPBotton)
+        histoMenu.addAction(histoCATBotton)
+
+
 
         
 
@@ -136,9 +144,17 @@ class MainWindow(QMainWindow):
           
           
         
-    def launchHistoView (self):
+    def launchHistoGRUPView (self):
         
-        self.hist=Histogram(self.mainController)
+        self.hist=Histogram(self.mainController,"GRUP")
+
+    def launchHistoCATView (self):
+        
+        self.hist=Histogram(self.mainController,"CAT.")
+
+    def launchHistoMARCAView (self):
+        
+        self.hist=Histogram(self.mainController,"MARCA Y MODELO")
 
 
     def launchAsocGRUPView (self):

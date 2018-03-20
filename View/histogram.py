@@ -25,15 +25,15 @@ class Histogram(QWidget):
     
     
     
-    def __init__(self, contro):
+    def __init__(self, contro,header):
         super().__init__()
         self.controller=contro
-        self.title = 'Histograma Defectos Vehiculo'
+        self.title = 'Histograma'+header
         self.left = 10
         self.top = 10
         self.width = 640
         self.height = 480
-        
+        self.head=header
         
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
@@ -41,8 +41,8 @@ class Histogram(QWidget):
         
         self.cb = QComboBox()
         self.button = QPushButton("Calcula Histograma")
-        if(self.controller.obtainGRUPS()!=None):
-         self.cb.addItems([str(i) for i in self.controller.obtainGRUPS()])
+        if(self.controller.obtainHistoHeader(self.head)!=None):
+         self.cb.addItems([str(i) for i in self.controller.obtainHistoHeader(self.head)])
          self.button.clicked.connect(self.populatehisto)
 
         self.mainLayout = QGridLayout()

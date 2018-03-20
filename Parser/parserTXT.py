@@ -136,7 +136,8 @@ class ParserTXT(Parser):
       file.close()
       df=pd.DataFrame.from_dict(self.dic)
       df = df.fillna(value="")
-      
+      df= df.astype('str')#Change all the dataset to string
+      df.columns =df.columns.str.strip()
       
       return df
   

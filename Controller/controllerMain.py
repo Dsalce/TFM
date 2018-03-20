@@ -70,11 +70,9 @@ class MainController(object):
     #Create all the data structure after the file is load
     def createModel(self,file):
         df=self.parser.loadFile(file,self.itv)
-        df= df.astype('str')#Change all the dataset to string
-        df.columns =df.columns.str.strip()
+        
+
         self.itv.calcDefectInspector("INS","DEFEC.","GRADO")
-        self.itv.calcDefectGrup("INSPECCION","GRUP","DEFEC.","GRADO")
-        #Controller instance
         self.cTree=TreeViewController()
         self.cRules=RulesController()
         self.cTree.setModel(self.itv)
@@ -93,8 +91,8 @@ class MainController(object):
     def obtainHisto(self,grup):
         return self.itv.countNumDefectVehicle(grup)
     #Obtain the list of grups
-    def obtainGRUPS(self):
-       return self.itv.obtainGRUP()
+    def obtainHistoHeader(self,head):
+       return self.itv.obtainHistoHeader(head)
 
     #Gets the header
     def getHeader(self):

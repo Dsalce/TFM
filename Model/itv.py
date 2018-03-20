@@ -80,9 +80,8 @@ class itv(object):
 
 
     #Calculate and populate the defect of the class of vehicle
-    def calcDefectGrup(self,headerInspection,headerGrup,headerDefect,headerGrade):
+    def calcDefect(self,headerInspection,headerGrup,headerDefect,headerGrade):
        i=0
-      
        defect=self.dic[headerDefect]
        grado=self.dic[headerGrade]
        inspec=self.dic[headerInspection]
@@ -100,17 +99,20 @@ class itv(object):
 
        
     #Return an ordered dictionary of number of defect per number of vehicles
-    def countNumDefectVehicle(self,grup):
+    def countNumDefectVehicle(self,typeHeader):
         
-        return collections.OrderedDict(sorted(self.vehicle[int(grup)].obtainNumInspection().items()))
+        return collections.OrderedDict(sorted(self.vehicle[typeHeader].obtainNumInspection().items()))
         
          
     #Obtain the list of GRUP    
-    def obtainGRUP(self):
+    def obtainHistoHeader(self,head):
+
       if(len(self.dic)==0):
        return None
       else:
-       return sorted(list(set(self.dic["GRUP"])))
+       self.calcDefect("INSPECCION",head,"DEFEC.","GRADO")
+       return sorted(list(set(self.dic[head])))
+
   
 
 
