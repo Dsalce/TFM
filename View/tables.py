@@ -124,9 +124,19 @@ class TableView(QTableWidget):
                     it = QTableWidgetItem(item.text())
                     it.setFlags(Qt.ItemIsUserCheckable |Qt.ItemIsEnabled)
                     it.setCheckState(Qt.Checked)
-                    self.table.setItem(j,0, it)
+                    #self.table.setItem(j,0, it)
                     self.checkBoxs.append(it)
                     j=j+1
+
+
+  
+        
+        for i in range(len(self.checkBoxs)):
+                print()
+                self.table.setItem(j,0,  self.checkBoxs[i]
+                
+
+
 
         self.table.setRowCount(len(self.checkBoxs))
         checkableAction = QWidgetAction(self.menu)
@@ -175,6 +185,14 @@ class TableView(QTableWidget):
        
         
  
-    
+    def sort(self,l):
+      i=0
+      for i in range( len(l)):
+        j = i-1 
+        key = l[i]
+        while (l[j].text() > key.text()) and (j >= 0):
+           l[j+1] = l[j]
+           j -= 1
+        l[j+1] = key
  
 
