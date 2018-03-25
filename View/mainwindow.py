@@ -89,13 +89,19 @@ class MainWindow(QMainWindow):
         ruleMenu.addAction(ruleGRUPBotton)
         ruleMenu.addAction(ruleMARCABotton)
         ruleMenu.addAction(ruleCATBotton)
+
+        self.countEle = self.mainMenu.addMenu('valores')
+        self.countEle.move(200,200)
+
         
  
         exitButton = QAction(QIcon('exit24.png'), 'Exit', self)
         exitButton.setStatusTip('Exit application')
         exitButton.triggered.connect(self.close)
         fileMenu.addAction(exitButton)
- 
+
+    def updateTableCount(self,num,total):
+        self.countEle.setTitle(str(num)+"/"+str(total))
     
     def launchLoadFileWindow(self):
       

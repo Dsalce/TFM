@@ -26,7 +26,7 @@ class MainController(object):
         self.cTree=None
         self.cRules=None
         #Instance of the main window
-        mainWindow = MainWindow(self,app)
+        self.mainWindow = MainWindow(self,app)
         sys.exit(app.exec_())
         
     #Function to load the type of file that the user select
@@ -106,3 +106,6 @@ class MainController(object):
     #Gets the length dictionary
     def lenDic(self):
        return self.itv.lenDic()
+
+    def updateTableCount(self,num):
+        self.mainWindow.updateTableCount(num,self.itv.lenDic())

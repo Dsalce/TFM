@@ -40,6 +40,8 @@ class TableView(QTableWidget):
 
         i=0
         j=0
+        
+        self.mainController.updateTableCount(self.mainController.lenDic())
         while(i < self.mainController.lenDic()):
             for h in headers:
              
@@ -58,36 +60,48 @@ class TableView(QTableWidget):
     def clearFilter(self):
         for i in range(self.rowCount()):
             self.setRowHidden(i, False)
-
+        self.mainController.updateTableCount(self.mainController.lenDic())
         self.menu.close()
-
+ 
         
 
 
     def filterdata(self):
 
         columnsShow = dict([(i, True) for i in range(self.rowCount())])
-
+        k=0
         for i in range(self.rowCount()):
-            for j in range(self.columnCount()):
-                item = self.item(i, j)
-                if self.keywords[j]:
-                    if item.text() not in self.keywords[j]:
+            #for j in range(self.columnCount()):
+
+                    item = self.item(i, self.col)
+                #if self.keywords[self.col]:
+                    if item.text() not in self.keywords[self.col]:
                         columnsShow[i] = False
+                    else:
+                        k+=1
+                
+                       
         for key, value in columnsShow.items():
             self.setRowHidden(key, not value)
+            
+        self.mainController.updateTableCount(k)
 
     def slotSelect(self, state):
-
         for checkbox in self.checkBoxs:
-            checkbox.setCheckState(Qt.Checked == state)
+          checkbox.setCheckState(Qt.Checked == state)  
+          
 
+        
     def menuClose(self):
         self.keywords[self.col] = []
+        
         for element in self.checkBoxs:
-            #if element.isChecked():
             if element.checkState() == Qt.Checked:
+                print(element.text())
                 self.keywords[self.col].append(element.text())
+            
+
+        
         self.filterdata()
         self.menu.close()
 
@@ -116,7 +130,7 @@ class TableView(QTableWidget):
         checkBox.stateChanged.connect(self.slotSelect)
         j=0
         for i in range(self.rowCount()):
-           # if not self.isRowHidden(i):
+            if not self.isRowHidden(i):
                 item = self.item(i, self.col )
                 if item.text() not in data_unique:
                     data_unique.append(item.text())
@@ -124,18 +138,19 @@ class TableView(QTableWidget):
                     it = QTableWidgetItem(item.text())
                     it.setFlags(Qt.ItemIsUserCheckable |Qt.ItemIsEnabled)
                     it.setCheckState(Qt.Checked)
-                    #self.table.setItem(j,0, it)
+                    
                     self.checkBoxs.append(it)
                     j=j+1
 
 
-  
-        
+        self.checkBoxs=sorted(self.checkBoxs, key=lambda it: it.text())
+       # self.sort(self.checkBoxs[i])
+        j=0
         for i in range(len(self.checkBoxs)):
-                print()
-                self.table.setItem(j,0,  self.checkBoxs[i]
-                
-
+                #print(self.checkBoxs[i].text())
+                self.table.setItem(j,0,  self.checkBoxs[i])
+                j=j+1
+        self.table.update()
 
 
         self.table.setRowCount(len(self.checkBoxs))
