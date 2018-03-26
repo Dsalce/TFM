@@ -71,25 +71,31 @@ class TableView(QTableWidget):
         columnsShow = dict([(i, True) for i in range(self.rowCount())])
         k=0
         for i in range(self.rowCount()):
-            #for j in range(self.columnCount()):
+            for j in range(self.columnCount()):
 
-                    item = self.item(i, self.col)
-                #if self.keywords[self.col]:
-                    if item.text() not in self.keywords[self.col]:
+                item = self.item(i, j)
+                if self.keywords[j]:
+                    if item.text() not in self.keywords[j]:
                         columnsShow[i] = False
                     else:
                         k+=1
+
                 
-                       
-        for key, value in columnsShow.items():
+        if k!=0:             
+         for key, value in columnsShow.items():
             self.setRowHidden(key, not value)
+        else: 
+         for key, value in columnsShow.items():
+            self.setRowHidden(key, True)
             
         self.mainController.updateTableCount(k)
 
     def slotSelect(self, state):
         for checkbox in self.checkBoxs:
-          checkbox.setCheckState(Qt.Checked == state)  
-          
+         if Qt.Checked == state :  
+          checkbox.setCheckState(Qt.Checked)  
+         else:
+          checkbox.setCheckState(Qt.Unchecked)  
 
         
     def menuClose(self):
@@ -97,7 +103,6 @@ class TableView(QTableWidget):
         
         for element in self.checkBoxs:
             if element.checkState() == Qt.Checked:
-                print(element.text())
                 self.keywords[self.col].append(element.text())
             
 
@@ -126,7 +131,7 @@ class TableView(QTableWidget):
         checkableAction = QWidgetAction(self.menu)
         checkableAction.setDefaultWidget(checkBox)
         self.menu.addAction(checkableAction)
-        checkBox.setChecked(True)
+        checkBox.setChecked(Qt.Checked)
         checkBox.stateChanged.connect(self.slotSelect)
         j=0
         for i in range(self.rowCount()):

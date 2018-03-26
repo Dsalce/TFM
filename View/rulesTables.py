@@ -27,18 +27,25 @@ class RulesTableView(QWidget):
         self.table = QTableView()
         self.table.setColumnWidth(0, 120)
         self.table.setColumnWidth(1, 120)
-
+        self.rTextButton = QPushButton("R.Asociacion Coincidencia")
         self.rButton = QPushButton("R.Asociacion")
         self.cb = QComboBox()
         if(self.rController!=None):
          self.cb.addItems(self.rController.obtainListHeader(self.head))
          self.rButton.clicked.connect(self.populateTable)
+         self.rTextButton.clicked.connect(self.populateTableButton)
         mainLayout = QGridLayout()
         mainLayout.setSpacing(10)
    
+        
+
+        self.textbox = QLineEdit(self)
+        self.textbox.resize(280,40)
 
         mainLayout.addWidget(self.cb,1,0)
         mainLayout.addWidget(self.rButton,1,1)
+        mainLayout.addWidget(self.textbox,2,0)
+        mainLayout.addWidget(self.rTextButton,2,1)
 
         mainLayout.addWidget(self.table)
         self.setLayout(mainLayout)
@@ -57,6 +64,16 @@ class RulesTableView(QWidget):
         
         self.table.setModel(self.pandas)
         self.table.update()
+
+    def populateTableButton(self):
+
+        
+        df=self.rController.getDataSetContains( self.textbox.text().upper().strip(),self.head)
+        self.pandas= PandasModel(df)
+        
+        self.table.setModel(self.pandas)
+        self.table.update()
+
 
 
 

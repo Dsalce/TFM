@@ -65,15 +65,18 @@ class MainWindow(QMainWindow):
         
         
         histoMenu = self.mainMenu.addMenu('Histogramas')
-        histoMARCABotton=  QAction(QIcon(), 'Histograma Model', self)
+        histoMARCABotton=  QAction(QIcon(), 'Histograma MARCA Y MODELO', self)
         histoGRUPBotton=  QAction(QIcon(), 'Histograma GRUP', self)
         histoCATBotton=  QAction(QIcon(), 'Histograma CAT', self)
+        histoINSBotton=  QAction(QIcon(), 'Histograma INSPECTOR', self)
         histoCATBotton.triggered.connect(self.launchHistoCATView)
         histoGRUPBotton.triggered.connect(self.launchHistoGRUPView)
         histoMARCABotton.triggered.connect(self.launchHistoMARCAView)
+        histoINSBotton.triggered.connect(self.launchHistoINSView)
         histoMenu.addAction(histoMARCABotton)
         histoMenu.addAction(histoGRUPBotton)
         histoMenu.addAction(histoCATBotton)
+        histoMenu.addAction(histoINSBotton)
 
 
 
@@ -83,12 +86,15 @@ class MainWindow(QMainWindow):
         ruleGRUPBotton=  QAction(QIcon(), 'Reglas  GRUP', self)
         ruleMARCABotton=  QAction(QIcon(), 'Reglas  MARCA Y MODELO', self)
         ruleCATBotton=  QAction(QIcon(), 'Reglas  CAT', self)
+        ruleINSBotton=  QAction(QIcon(), 'Reglas  INSPECTOR', self)
         ruleCATBotton.triggered.connect(self.launchAsocCATView)
         ruleGRUPBotton.triggered.connect(self.launchAsocGRUPView)
         ruleMARCABotton.triggered.connect(self.launchAsocMARCAView)
+        ruleINSBotton.triggered.connect(self.launchAsocINSView)
         ruleMenu.addAction(ruleGRUPBotton)
         ruleMenu.addAction(ruleMARCABotton)
         ruleMenu.addAction(ruleCATBotton)
+        ruleMenu.addAction(ruleINSBotton)
 
         self.countEle = self.mainMenu.addMenu('valores')
         self.countEle.move(200,200)
@@ -161,6 +167,20 @@ class MainWindow(QMainWindow):
     def launchHistoMARCAView (self):
         
         self.hist=Histogram(self.mainController,"MARCA Y MODELO")
+
+    def launchHistoMARCAView (self):
+        
+        self.hist=Histogram(self.mainController,"MARCA Y MODELO")
+
+    def launchHistoINSView (self):
+        
+        self.hist=Histogram(self.mainController,"INS")
+
+
+
+    def launchAsocINSView (self):
+        
+        self.rule=RulesTableView(self.mainController.obtainControllerRule(),"INS")
 
 
     def launchAsocGRUPView (self):

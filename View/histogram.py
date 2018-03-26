@@ -41,9 +41,13 @@ class Histogram(QWidget):
         
         self.cb = QComboBox()
         self.button = QPushButton("Calcula Histograma")
+        self.rTextButton = QPushButton("Calcula Histograma Coincidencia")
+
         if(self.controller.obtainHistoHeader(self.head)!=None):
          self.cb.addItems([str(i) for i in self.controller.obtainHistoHeader(self.head)])
-         self.button.clicked.connect(self.populatehisto)
+         self.button.clicked.connect(self.populateHisto)
+         self.rTextButton.clicked.connect(self.populateContainsHisto)
+
 
         self.mainLayout = QGridLayout()
         self.mainLayout.setSpacing(10)
@@ -62,7 +66,14 @@ class Histogram(QWidget):
    
     
 
-    def populatehisto(self):
+    def populateHisto(self):
+        data=self.controller.obtainHisto( self.cb.currentText().strip())
+        
+        self.sc.compute_initial_figure(data)
+        
+        self.mainLayout.update()ç
+
+    def populateContainsHisto(self):
         data=self.controller.obtainHisto( self.cb.currentText().strip())
         
         self.sc.compute_initial_figure(data)

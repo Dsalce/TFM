@@ -31,31 +31,24 @@ class Rules(object):
 
   
 
-  #Obtain association rule to grup
-  def defectosGRUPDataSet(self,  typeCar):
+ 
+  #Obtain association rule with contains
+  def defectsContainsDataSet(self,param,head):
      
-     basket_sets = (self.df[self.df["GRUP"]==str(typeCar)].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
+     basket_sets = (self.df[self.df[head].str.contains(param)].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
+     if(not basket_sets.empty):
+      basket_sets = basket_sets.applymap(self.encode_units)
+      frequent_itemsets = apriori(basket_sets,min_support=0.05, use_colnames=True)
      
-     basket_sets = basket_sets.applymap(self.encode_units)
-     frequent_itemsets = apriori(basket_sets,min_support=0.05, use_colnames=True)
-     
-     rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1)
-     return rules
-       
-  #Obtain association rule to model 
-  def defectosModelDataSet(self,modelCar):
-     
-     basket_sets = (self.df[self.df["MARCA Y MODELO"]==modelCar].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
+      rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1)
+      return rules
+     else:
+      return pd.DataFrame()
 
-     basket_sets = basket_sets.applymap(self.encode_units)
-     frequent_itemsets = apriori(basket_sets,min_support=0.05, use_colnames=True)
-
-     rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1)
-     return rules
-  #Obtain association rule to model 
-  def defectosCATDataSet(self,modelCar):
+  #Obtain association rule 
+  def defectsDataSet(self,param,head):
      
-     basket_sets = (self.df[self.df["CAT."]==modelCar].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
+     basket_sets = (self.df[self.df[head]==param].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
 
      basket_sets = basket_sets.applymap(self.encode_units)
      frequent_itemsets = apriori(basket_sets,min_support=0.05, use_colnames=True)

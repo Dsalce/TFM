@@ -14,14 +14,15 @@ class RulesController(object):
           
       
         
-      #Gets the dataset filtered by GRUP
-      def getDataSet(self,grupDefect,header):
-         if(header=="GRUP") :
-          return self.rules.defectosGRUPDataSet(grupDefect)
-         elif(header=="MARCA Y MODELO"):
-          return self.rules.defectosModelDataSet(grupDefect)
-         elif(header=="CAT."):
-          return self.rules.defectosCATDataSet(grupDefect)
+      #Gets the rules filtered by the header and the parameter
+      def getDataSet(self,param,header):
+        
+          return self.rules.defectsDataSet(param,header)
+
+      #Gets the rules filtered by the header and the contains parameter
+      def getDataSetContains(self,param,header):
+        
+          return self.rules.defectsContainsDataSet(param,header)
 
       #Set the dataset
       def setRules(self,rule):
