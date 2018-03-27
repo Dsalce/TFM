@@ -24,7 +24,7 @@ class itv(object):
       self.dic={}
       self.headers=[]
       self.inspector={}
-      self.vehicle={}
+      self.histo={}
       self.rule=None
 
     #Mean per year
@@ -87,21 +87,42 @@ class itv(object):
        inspec=self.dic[headerInspection]
        for car in self.dic[headerGrup]:
 
-            if( car not in list(self.vehicle.keys())):
+            if( car not in list(self.histo.keys()) ):
              
-              self.vehicle[car]=Vehicle(car)
-              
+              self.histo[car]=Vehicle(car)
 
             
-            self.vehicle[car].addDefect(str(defect[i])+"-"+str(grado[i]))
-            self.vehicle[car].addInspection(str(inspec[i]),str(defect[i]))
+
+            
+            self.histo[car].addDefect(str(defect[i])+"-"+str(grado[i]))
+            self.histo[car].addInspection(str(inspec[i]),str(defect[i]))
             i=i+1
+
+    
+
+
 
        
     #Return an ordered dictionary of number of defect per number of vehicles
-    def countNumDefectVehicle(self,typeHeader):
+    def countNumDefectVehicle(self,typeHeader,contains):
+        data=[]
+        auxDic={}
+        if(contains):
+              aux=[s for s in list(self.histo.keys()) if typeHeader in s]
+              for key in aux:
+                data.append(self.histo[key].obtainNumInspection())
+              
+              for d in data:
+                 for k,v in d.items():
+                   if( k not in list(auxDic.keys())):
+                      auxDic[k]=v
+                   else:  
+                      auxDic[k]=v+auxDic[k]
+ 
+              return collections.OrderedDict(sorted(auxDic.items())) 
+        else:
+              return collections.OrderedDict(sorted(self.histo[typeHeader].obtainNumInspection().items()))
         
-        return collections.OrderedDict(sorted(self.vehicle[typeHeader].obtainNumInspection().items()))
         
          
     #Obtain the list of GRUP    
@@ -110,7 +131,7 @@ class itv(object):
       if(len(self.dic)==0):
        return None
       else:
-       self.calcDefect("INSPECCION",head,"DEFEC.","GRADO")
+       self.calcDefect("INSPECCION",head,"DEFEC.","GRADO") 
        return sorted(list(set(self.dic[head])))
 
   

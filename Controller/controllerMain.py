@@ -88,8 +88,8 @@ class MainController(object):
     def obtainControllerRule(self):
         return self.cRules
     #Obtain the number of vehicle per number of defects
-    def obtainHisto(self,grup):
-        return self.itv.countNumDefectVehicle(grup)
+    def obtainHisto(self,grup,contains):
+        return self.itv.countNumDefectVehicle(grup,contains)
     #Obtain the list of grups
     def obtainHistoHeader(self,head):
        return self.itv.obtainHistoHeader(head)

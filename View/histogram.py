@@ -51,10 +51,19 @@ class Histogram(QWidget):
 
         self.mainLayout = QGridLayout()
         self.mainLayout.setSpacing(10)
+
+
+        self.textbox = QLineEdit(self)
+        self.textbox.resize(280,40)
    
         
         self.mainLayout.addWidget(self.cb,1,0)
         self.mainLayout.addWidget(self.button,1,1)
+
+        self.mainLayout.addWidget(self.textbox,2,0)
+        self.mainLayout.addWidget(self.rTextButton,2,1)
+
+       
         
         self.sc = MyStaticMplCanvas(self, width=5, height=4, dpi=100,data=None)
         self.mainLayout.addWidget(self.sc)
@@ -67,14 +76,14 @@ class Histogram(QWidget):
     
 
     def populateHisto(self):
-        data=self.controller.obtainHisto( self.cb.currentText().strip())
+        data=self.controller.obtainHisto( self.cb.currentText().strip(),False)
         
         self.sc.compute_initial_figure(data)
         
-        self.mainLayout.update()ç
+        self.mainLayout.update()
 
     def populateContainsHisto(self):
-        data=self.controller.obtainHisto( self.cb.currentText().strip())
+        data=self.controller.obtainHisto( self.textbox.text().upper().strip(),True)
         
         self.sc.compute_initial_figure(data)
         
@@ -114,8 +123,7 @@ class MyStaticMplCanvas(MyMplCanvas):
      if(data!=None):
         y = list(data.values())
         x=list(data.keys())
-        print(x)
-        print(y)
+        
         self.axes.cla()
         self.axes.bar(x,y)
         self.axes.set_xlabel('Numero de defectos')

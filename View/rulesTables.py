@@ -34,21 +34,21 @@ class RulesTableView(QWidget):
          self.cb.addItems(self.rController.obtainListHeader(self.head))
          self.rButton.clicked.connect(self.populateTable)
          self.rTextButton.clicked.connect(self.populateTableButton)
-        mainLayout = QGridLayout()
-        mainLayout.setSpacing(10)
+        self.mainLayout = QGridLayout()
+        self.mainLayout.setSpacing(10)
    
         
 
         self.textbox = QLineEdit(self)
         self.textbox.resize(280,40)
 
-        mainLayout.addWidget(self.cb,1,0)
-        mainLayout.addWidget(self.rButton,1,1)
-        mainLayout.addWidget(self.textbox,2,0)
-        mainLayout.addWidget(self.rTextButton,2,1)
+        self.mainLayout.addWidget(self.cb,1,0)
+        self.mainLayout.addWidget(self.rButton,1,1)
+        self.mainLayout.addWidget(self.textbox,2,0)
+        self.mainLayout.addWidget(self.rTextButton,2,1)
 
-        mainLayout.addWidget(self.table)
-        self.setLayout(mainLayout)
+        self.mainLayout.addWidget(self.table)
+        self.setLayout(self.mainLayout)
        
         self.table.setAlternatingRowColors(True)
        
