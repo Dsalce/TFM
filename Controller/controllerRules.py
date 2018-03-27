@@ -31,3 +31,10 @@ class RulesController(object):
       #Obtain the list of GRUP
       def obtainListHeader(self,header):
       	return self.rules.obtainListHeader(header)
+
+
+      def obtainTotal(self,param,head):
+          return self.rules.lenDataset(param,head)
+
+      def obtainTotalContains(self,param,head):
+          return self.rules.lenContainsDataset(param,head)

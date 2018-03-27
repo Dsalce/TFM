@@ -41,6 +41,8 @@ class Rules(object):
       frequent_itemsets = apriori(basket_sets,min_support=0.05, use_colnames=True)
      
       rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1)
+
+
       return rules
      else:
       return pd.DataFrame()
@@ -55,7 +57,12 @@ class Rules(object):
 
      rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1)
      return rules
+  
+  def lenDataset(self,param,head):
+     return self.df[self.df[head]==param].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count()
 
+  def lenContainsDataset(self,param,head):
+     return self.df[self.df[head].str.contains(param)].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count()
 
   #Set pandas
   def setPandas(self,df):

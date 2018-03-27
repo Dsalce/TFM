@@ -25,6 +25,7 @@ class RulesTableView(QWidget):
 
         self.rController=controller
         self.table = QTableView()
+        self.label= QLabel();
         self.table.setColumnWidth(0, 120)
         self.table.setColumnWidth(1, 120)
         self.rTextButton = QPushButton("R.Asociacion Coincidencia")
@@ -36,7 +37,7 @@ class RulesTableView(QWidget):
          self.rTextButton.clicked.connect(self.populateTableButton)
         self.mainLayout = QGridLayout()
         self.mainLayout.setSpacing(10)
-   
+        
         
 
         self.textbox = QLineEdit(self)
@@ -46,8 +47,9 @@ class RulesTableView(QWidget):
         self.mainLayout.addWidget(self.rButton,1,1)
         self.mainLayout.addWidget(self.textbox,2,0)
         self.mainLayout.addWidget(self.rTextButton,2,1)
-
-        self.mainLayout.addWidget(self.table)
+        
+        self.mainLayout.addWidget(self.table,3,0)
+        self.mainLayout.addWidget(self.label,3,1)
         self.setLayout(self.mainLayout)
        
         self.table.setAlternatingRowColors(True)
@@ -57,7 +59,7 @@ class RulesTableView(QWidget):
 
      
     def populateTable(self):
-
+        self.label.setText(str(self.rController.obtainTotal(self.cb.currentText().strip(),self.head)))
         df=self.rController.getDataSet( self.cb.currentText().strip(),self.head)
         
         self.pandas= PandasModel(df)
@@ -67,7 +69,7 @@ class RulesTableView(QWidget):
 
     def populateTableButton(self):
 
-        
+        self.label.setText(str(self.rController.obtainTotalContains(self.textbox.text().upper().strip(),self.head)))
         df=self.rController.getDataSetContains( self.textbox.text().upper().strip(),self.head)
         self.pandas= PandasModel(df)
         
