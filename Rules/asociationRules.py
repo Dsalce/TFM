@@ -7,6 +7,7 @@ import statistics as stats
 import pandas as pd
 from mlxtend.frequent_patterns import apriori
 from mlxtend.frequent_patterns import association_rules
+import operator
 
 class Rules(object):
 
@@ -41,7 +42,11 @@ class Rules(object):
       frequent_itemsets = apriori(basket_sets,min_support=0.05, use_colnames=True)
      
       rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1)
-
+      l=[]
+      for  k in  range(len(rules["support"])):
+           l.append(self.lenConData)
+      rules["Numero de elementos regla"]=list(map(operator.mul, list(map(operator.mul, rules["support"], rules["confidence"])),l))
+      
 
       return rules
      else:
@@ -56,13 +61,22 @@ class Rules(object):
      frequent_itemsets = apriori(basket_sets,min_support=0.05, use_colnames=True)
 
      rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1)
+     l=[]
+     for  k in  range(len(rules["support"])):
+           l.append(self.lenData)
+
+     rules["Numero de elementos regla"]=list(map(operator.mul, list(map(operator.mul, rules["support"], rules["confidence"])),l))
+
      return rules
   
   def lenDataset(self,param,head):
-     return self.df[self.df[head]==param].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count()
+     self.lenData=len(self.df[self.df[head]==param].groupby([ "INSPECCION"]).nunique())
+     return self.lenData
 
   def lenContainsDataset(self,param,head):
-     return self.df[self.df[head].str.contains(param)].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count()
+
+     self.lenConData= len(self.df[self.df[head].str.contains(param)].groupby(["INSPECCION"]).nunique())
+     return self.lenConData
 
   #Set pandas
   def setPandas(self,df):
