@@ -20,10 +20,11 @@ class MainWindow(QMainWindow):
         self.app=app
         self.mainController=controller
         self.title = 'MainWindow'
-        self.left = 10
-        self.top = 10
+        self.left = 50
+        self.top = 50
         self.width = 920
         self.height = 780
+
         self.initUI()
         
  
@@ -96,8 +97,7 @@ class MainWindow(QMainWindow):
         ruleMenu.addAction(ruleCATBotton)
         ruleMenu.addAction(ruleINSBotton)
 
-        self.countEle = self.mainMenu.addMenu('valores')
-        self.countEle.move(200,200)
+        
 
         
  
@@ -107,7 +107,8 @@ class MainWindow(QMainWindow):
         fileMenu.addAction(exitButton)
 
     def updateTableCount(self,num,total):
-        self.countEle.setTitle(str(num)+"/"+str(total))
+        
+        self.statusBar().showMessage(str(num)+"/"+str(total))
     
     def launchLoadFileWindow(self):
       

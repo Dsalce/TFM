@@ -43,11 +43,17 @@ class Rules(object):
      
       rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1)
       l=[]
+      auxlist=[]
       for  k in  range(len(rules["support"])):
            l.append(self.lenConData)
-      rules["Numero de elementos regla"]=list(map(operator.mul, list(map(operator.mul, rules["support"], rules["confidence"])),l))
+      auxlist=list(map(operator.mul, list(map(operator.mul, rules["support"], rules["confidence"])),l))
+      l=[]
       
+      for  rule in   auxlist:
+         
+         l.append(round( rule,2))
 
+      rules["Nº de elementos"]=l
       return rules
      else:
       return pd.DataFrame()
@@ -62,10 +68,18 @@ class Rules(object):
 
      rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1)
      l=[]
+     auxlist=[]
      for  k in  range(len(rules["support"])):
            l.append(self.lenData)
 
-     rules["Numero de elementos regla"]=list(map(operator.mul, list(map(operator.mul, rules["support"], rules["confidence"])),l))
+     auxlist=list(map(operator.mul, list(map(operator.mul, rules["support"], rules["confidence"])),l))
+     
+     l=[]
+     for  rule in   auxlist:
+         
+         l.append(round( rule,2))
+
+     rules["Nº elementos"]=l
 
      return rules
   
