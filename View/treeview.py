@@ -8,8 +8,8 @@ class TreeView(QWidget):
         super().__init__()
         self.cTree=cTree
         self.title = 'TreeView Defects'
-        self.left = 10
-        self.top = 10
+        self.left = 50
+        self.top = 50
         self.width = 640
         self.height = 480
  

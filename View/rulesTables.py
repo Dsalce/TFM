@@ -13,8 +13,8 @@ class RulesTableView(QWidget):
     def __init__(self,controller,header):
         super().__init__()
         self.title = 'Reglas de asociacion'
-        self.left = 10
-        self.top = 10
+        self.left = 50
+        self.top = 50
         self.width = 840
         self.height = 800
         self.head=header
@@ -69,7 +69,7 @@ class RulesTableView(QWidget):
 
     def populateTableButton(self):
 
-        self.label.setText(str(self.rController.obtainTotalContains(self.textbox.text().upper().strip(),self.head)))
+        self.label.setText("Total Nº elementos: "+str(self.rController.obtainTotalContains(self.textbox.text().upper().strip(),self.head)))
         df=self.rController.getDataSetContains( self.textbox.text().upper().strip(),self.head)
         self.pandas= PandasModel(df)
         

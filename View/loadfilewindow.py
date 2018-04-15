@@ -9,8 +9,8 @@ class LoadFileWindow(QWidget):
         self.errFile=0
         self.mainController=controller
         self.title = 'LoadFileWindow'
-        self.left = 10
-        self.top = 10
+        self.left = 50
+        self.top = 50
         self.width = 640
         self.height = 480
         self.initUI()
@@ -27,7 +27,7 @@ class LoadFileWindow(QWidget):
     def openFileNameDialog(self):    
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","All Files (*);;Python Files (*.py)", options=options)
+        fileName, _ = QFileDialog.getOpenFileName(self,"Importar fichero ", "","All Files (*);;Python Files (*.py)", options=options)
         self.errFile=self.mainController.loadFileTxt(fileName)
        
  

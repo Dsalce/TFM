@@ -3,6 +3,9 @@
 from PyQt5.QtWidgets import QApplication, QWidget,QMessageBox 
 
 from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
 
 
 from View.tables import *
@@ -19,13 +22,16 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.app=app
         self.mainController=controller
-        self.title = 'MainWindow'
+        self.title = 'Detección de anomalias ITV'
         self.left = 50
         self.top = 50
-        self.width = 920
-        self.height = 780
-
+        self.width = 1080
+        self.height = 720
+        
+        
         self.initUI()
+
+
         
  
     def initUI(self):
@@ -33,15 +39,31 @@ class MainWindow(QMainWindow):
         self.setGeometry(self.left, self.top, self.width, self.height)
         self.tableView=TableView(self.mainController)
         
-        
+         
         self.menuCreate()
-        self.setCentralWidget(self.tableView) 
         
-       
+        self.label = QLabel(self)
+
+        self.pixmap = QPixmap('Image/itv.png')
+
+        self.pixmap=self.pixmap.scaled(self.width, self.height)
+        self.label.setPixmap(self.pixmap)
+        
+        self.setFixedSize(self.width, self.height)
+        self.setWindowFlags(Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint )
+        self.setCentralWidget(self.label) 
+        
+        
         
         self.show()
 
 
+    def setTitle(self,file):
+      
+      self.setWindowTitle(self.title+"---"+file)
+
+    
+     
 
     def menuCreate(self):  
         self.mainMenu = self.menuBar() 
@@ -98,8 +120,9 @@ class MainWindow(QMainWindow):
         ruleMenu.addAction(ruleINSBotton)
 
         
-
-        
+        self.status=QLabel()
+        self.statusBar = QStatusBar()
+        self.setStatusBar(self.statusBar)
  
         exitButton = QAction(QIcon('exit24.png'), 'Exit', self)
         exitButton.setStatusTip('Exit application')
@@ -107,11 +130,17 @@ class MainWindow(QMainWindow):
         fileMenu.addAction(exitButton)
 
     def updateTableCount(self,num,total):
-        
-        self.statusBar().showMessage(str(num)+"/"+str(total))
+        self.status.setText("Total : " +str(num)+"/"+str(total))
+        self.statusBar.addPermanentWidget(self.status)
+
     
     def launchLoadFileWindow(self):
-      
+       self.setMinimumSize(1,1)
+       self.setMaximumSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
+       self.setWindowFlags(Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint |Qt.WindowMaximizeButtonHint)
+       self.show()
+
+       
        loadFile = LoadFileWindow(self.mainController)
        loadFile.close()
        msg = QMessageBox()
@@ -131,7 +160,13 @@ class MainWindow(QMainWindow):
              
              msg.exec_()
        else:
+
+
+         
+         
+         self.setCentralWidget(self.tableView) 
          self.tableView.createTable()
+         
 
 
     def launchExportFileCSV(self):
@@ -196,11 +231,11 @@ class MainWindow(QMainWindow):
     def launchAsocCATView (self):
          
         self.rule=RulesTableView(self.mainController.obtainControllerRule(),"CAT.")
-         
+          
         
+          
          
-         
-        
+ 
          
          
          

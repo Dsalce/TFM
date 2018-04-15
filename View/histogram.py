@@ -29,8 +29,8 @@ class Histogram(QWidget):
         super().__init__()
         self.controller=contro
         self.title = 'Histograma'+header
-        self.left = 10
-        self.top = 10
+        self.left = 50
+        self.top = 50
         self.width = 640
         self.height = 480
         self.head=header
@@ -140,18 +140,3 @@ class MyStaticMplCanvas(MyMplCanvas):
        
 
 
-"""self.controller.obtainGRUPS()
-   data =self.controller.obtainHisto(grup)
-   print(data)
-   print(data.keys())
-   print(data.values())
-   y = list(data.values())
-   x=list(data.keys())
-   index=np.arange(len(x))
-   print(index)
-   print(x)
-   print(y)
-   plt.bar(x,y)
-   plt.xlabel('Numero de defectos')
-   plt.ylabel('Numero de vehiculos')
-   plt.show()"""

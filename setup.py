@@ -1,3 +1,6 @@
+#Comandos py.exe setup.py build
+#Copiar la carpeta images y los dll tcl86t.dll,tk86t.dll al build(borrar los anteriores)
+
 import sys
 from cx_Freeze import setup, Executable
 from sys import path
@@ -13,4 +16,7 @@ additional_mods = ['numpy.core._methods', 'numpy.lib.format','matplotlib.backend
 setup(
       version='1.0',
 	  options = {'build_exe': {'includes': additional_mods}},
-      executables = [Executable('Model/main.py',base = "Win32GUI")])
+	  windows = [{"icon_resources": [(1, "D:\David_inf\TFM\Image\icon.ico")]}],
+      executables = [Executable('Model/DeteccionAnomaliasItv.py',base = "Win32GUI")])
+	  
+	  

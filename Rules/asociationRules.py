@@ -42,46 +42,44 @@ class Rules(object):
       frequent_itemsets = apriori(basket_sets,min_support=0.05, use_colnames=True)
      
       rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1)
-      l=[]
-      auxlist=[]
-      for  k in  range(len(rules["support"])):
-           l.append(self.lenConData)
-      auxlist=list(map(operator.mul, list(map(operator.mul, rules["support"], rules["confidence"])),l))
-      l=[]
-      
-      for  rule in   auxlist:
-         
-         l.append(round( rule,2))
 
-      rules["Nº de elementos"]=l
-      return rules
+      return self.addNumberRules(rules,self.lenConData)
      else:
-      return pd.DataFrame()
+       return pd.DataFrame()
+
+  def addNumberRules(self,rules,lenD):
+     
+     if len(rules)!=0 :
+       l=[]
+       auxlist=[]
+       for  k in  range(len(rules["support"])):
+           l.append(lenD)
+       auxlist=list(map(operator.mul, list(map(operator.mul, rules["support"], rules["confidence"])),l))
+       l=[]
+      
+       for  rule in   auxlist:
+         
+          l.append(round( rule,2))
+
+       rules["Nº de elementos"]=l
+
+       return rules
+     else:
+       return pd.DataFrame()
 
   #Obtain association rule 
   def defectsDataSet(self,param,head):
      
-     basket_sets = (self.df[self.df[head]==param].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
-
+    basket_sets = (self.df[self.df[head]==param].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
+    if(not basket_sets.empty):
      basket_sets = basket_sets.applymap(self.encode_units)
      frequent_itemsets = apriori(basket_sets,min_support=0.05, use_colnames=True)
 
      rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1)
-     l=[]
-     auxlist=[]
-     for  k in  range(len(rules["support"])):
-           l.append(self.lenData)
-
-     auxlist=list(map(operator.mul, list(map(operator.mul, rules["support"], rules["confidence"])),l))
      
-     l=[]
-     for  rule in   auxlist:
-         
-         l.append(round( rule,2))
-
-     rules["Nº elementos"]=l
-
-     return rules
+     return self.addNumberRules(rules,self.lenData)
+    else:
+       return pd.DataFrame()
   
   def lenDataset(self,param,head):
      self.lenData=len(self.df[self.df[head]==param].groupby([ "INSPECCION"]).nunique())

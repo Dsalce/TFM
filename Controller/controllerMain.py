@@ -32,23 +32,29 @@ class MainController(object):
     #Function to load the type of file that the user select
     def loadFileTxt(self,file):
         self.itv=itv()
+        aux="/"
+        i=file.rfind("/")
+        fileName=file[ i+1:]
         try:
-
+         
          if("TXT"in file.upper()):
          
           self.file=file
           self.parser=ParserTXT()
           self.createModel(file)
+          self.mainWindow.setTitle(fileName)
          
          elif("XLSX" in file.upper()):
           self.file=file
           self.parser=ParserXLSX()
           self.createModel(file)
+          self.mainWindow.setTitle(fileName)
           
          elif("CSV" in file.upper()):
           self.file=file
           self.parser=ParserCSV()
           self.createModel(file)
+          self.mainWindow.setTitle(fileName)
 
          elif(file==""):
              return 0
