@@ -13,6 +13,8 @@ from View.loadfilewindow import *
 from View.treeview import *
 from View.histogram import *
 from View.rulesTables import *
+from View.tStudentView import *
+
 
 class MainWindow(QMainWindow):
 
@@ -119,6 +121,11 @@ class MainWindow(QMainWindow):
         ruleMenu.addAction(ruleCATBotton)
         ruleMenu.addAction(ruleINSBotton)
 
+
+        studentMenu = self.mainMenu.addMenu('T-Student')
+        ruleTStudentBotton=  QAction(QIcon(), 'Calcular T-Student', self)
+        ruleTStudentBotton.triggered.connect(self.launchStudentView)
+        studentMenu.addAction(ruleTStudentBotton)
         
         self.status=QLabel()
         self.statusBar = QStatusBar()
@@ -231,6 +238,11 @@ class MainWindow(QMainWindow):
     def launchAsocCATView (self):
          
         self.rule=RulesTableView(self.mainController.obtainControllerRule(),"CAT.")
+
+    def launchStudentView (self):
+         
+        self.rule=TStudentView(self.mainController.obtainControllerRule(),"MARCA Y MODELO")
+
           
         
           

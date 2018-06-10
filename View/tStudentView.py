@@ -5,15 +5,15 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QAction, QTableW
 
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import * 
 import pandas as pd
 from View.pandasModel import *
  
-class RulesTableView(QWidget):
+class TStudentView(QWidget):
 
     def __init__(self,controller,header):
         super().__init__()
-        self.title = 'Reglas de asociacion'
+        self.title = 'T-Student'
         self.left = 50
         self.top = 50
         self.width = 840
@@ -29,8 +29,8 @@ class RulesTableView(QWidget):
         self.label= QLabel();
         self.table.setColumnWidth(0, 120)
         self.table.setColumnWidth(1, 120)
-        self.rTextButton = QPushButton("R.Asociacion Coincidencia")
-        self.rButton = QPushButton("R.Asociacion")
+        self.rTextButton = QPushButton("T-Student Coincidencia")
+        self.rButton = QPushButton("T-Student")
         self.cb = QComboBox()
         if(self.rController!=None):
          self.cb.addItems(self.rController.obtainListHeader(self.head))
@@ -61,20 +61,20 @@ class RulesTableView(QWidget):
      
     def populateTable(self):
         self.label.setText(str(self.rController.obtainTotal(self.cb.currentText().strip(),self.head)))
-        df=self.rController.getDataSet( self.cb.currentText().strip(),self.head)
+        df=self.rController.getTStudent( self.cb.currentText().strip(),self.head)
         
         self.pandas= PandasModel(df)
-        
         self.table.setModel(self.pandas)
         self.table.update()
 
     def populateTableButton(self):
 
         self.label.setText("Total Nº elementos: "+str(self.rController.obtainTotalContains(self.textbox.text().upper().strip(),self.head)))
-        df=self.rController.getDataSetContains( self.textbox.text().upper().strip(),self.head)
+        df=self.rController.getTStudentContains( self.textbox.text().upper().strip(),self.head)
         self.pandas= PandasModel(df)
-        
         self.table.setModel(self.pandas)
+
+
         self.table.update()
 
 

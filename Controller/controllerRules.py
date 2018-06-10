@@ -38,3 +38,15 @@ class RulesController(object):
 
       def obtainTotalContains(self,param,head):
           return self.rules.lenContainsDataset(param,head)
+
+
+      #Gets the rules filtered by the header and the parameter
+      def getTStudent(self,param,header):
+        
+          return self.rules.tStudentDataSet(param,header)
+
+      #Gets the rules filtered by the header and the contains parameter
+      def getTStudentContains(self,param,header):
+        
+          return self.rules.tStudentDataSetContains(param,header)
+

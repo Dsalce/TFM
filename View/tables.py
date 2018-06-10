@@ -126,7 +126,7 @@ class TableView(QTableWidget):
        
 
         self.checkBoxs = []
-        checkBox = QCheckBox("Select all", self.menu)
+        checkBox = QCheckBox("Seleccionar todo", self.menu)
         
         checkableAction = QWidgetAction(self.menu)
         checkableAction.setDefaultWidget(checkBox)
