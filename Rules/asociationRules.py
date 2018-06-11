@@ -3,7 +3,8 @@ Association rules
 
 """
 
-import statistics as stats
+import statistics as stat
+from scipy import stats
 import pandas as pd
 from mlxtend.frequent_patterns import apriori
 from mlxtend.frequent_patterns import association_rules
@@ -106,45 +107,70 @@ class Rules(object):
  
   def tStudentDataSet(self,param,head):
      rules=self.defectsDataSet(param,head)
-     return rules
+     if(not rules.empty ):
+      return self.obtainTStudent(rules)
+     else:return rules
+
 
   def tStudentDataSetContains(self,param,head):
     rules=self.defectsContainsDataSet(param,head)
-     
-     
-    lComb=self.combinatoriaInspector()
-     
-     
+    if( not rules.empty ):
+     return self.obtainTStudent(rules)
+    else: return rules
+    
+    
 
+  def obtainTStudent(self,rules):
+
+
+    lComb=self.combinatoriaInspector()
+    lIns0=[]
+    lIns1=[]
+    lRulesX=[]
+    lRulesY=[]
+    lXTStudent=[]
+    lYTStudent=[]
     tstudent=pd.DataFrame()
-    tstudent["Inspectores"]=[]
-    tstudent["Regla"]=[]
-    tstudent["XT-Student"]=[]
-    tstudent["YT-Student"]=[]
+    
      
     for ins in lComb:
       i=0
-      print(ins[0])
+     
       insList0 = (self.df[(self.df["INS"]==ins[0]) ].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
       insList1 = (self.df[(self.df["INS"]==ins[1]) ].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
       insList0 = insList0.applymap(self.encode_units)
       insList1 = insList1.applymap(self.encode_units)
-      tstudent["Inspectores"].append(str(ins[0])+";"+str(ins[1]))
+      
+      
       for X in rules["antecedants"]:
           
-          tstudentX=stats.ttest_ind(stats.mean(insList0[X]),stats.mean(insList1[X]))
-
-          Y=(list(rules["consequent"][i])[0])
+          X=(list(X)[0])
+          Y=(list(rules["consequents"][i])[0])
           
+          if(X in insList0 and X in insList1 and Y in insList0 and Y in insList1):
+           #tstudentX=stats.ttest_ind(stat.mean(insList0[X]),stat.mean(insList1[X]))
+           tstudentX=stats.ttest_ind(insList0[X],insList1[X])
+
+           #tstudentY=stats.ttest_ind(stat.mean(self.calculoTStudentY(insList0,Y,X)),stat.mean(self.calculoTStudentY(insList1,Y,X)))
+           tstudentY=stats.ttest_ind(self.calculoTStudentY(insList0,Y,X),self.calculoTStudentY(insList1,Y,X))
+           #print(stat.mean(self.calculoTStudentY(insList0,Y,X)))
+           #print(stat.mean(self.calculoTStudentY(insList1,Y,X)))
+           lIns0.append(float(ins[0]))
+           lIns1.append(float(ins[1]))
+           lRulesX.append(float(X))
+           lRulesY.append(float(Y))
+           lXTStudent.append(tstudentX)
+           lYTStudent.append(tstudentY)
+           
+          i+=1
+
         
-          tstudentY=stats.ttest_ind(stats.mean(self.calculoTStudentY(insList0,Y,X),stats.mean(self.calculoTStudentY(insList1,Y,X))))
-
-          tstudent["Regla"].append(str(X)+"->"+str(Y))
-          tstudent["XT-Student"].append(tstudentX)
-          tstudent["YT-Student"].append(tstudentY)
-
-        
-
+    tstudent["Inspector1"]=lIns0
+    tstudent["Inspector2"]=lIns1
+    tstudent["ReglaX"]=lRulesX
+    tstudent["ReglaY"]=lRulesY
+    tstudent["XT-Student"]=lXTStudent
+    tstudent["YT-Student"]=lYTStudent
     return tstudent
 
   def combinatoriaInspector(self): 

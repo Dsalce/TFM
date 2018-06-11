@@ -16,7 +16,7 @@ class TStudentView(QWidget):
         self.title = 'T-Student'
         self.left = 50
         self.top = 50
-        self.width = 840
+        self.width = 1200
         self.height = 800
         self.head=header
         
