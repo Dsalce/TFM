@@ -27,8 +27,7 @@ class TStudentView(QWidget):
         self.rController=controller
         self.table = QTableView()
         self.label= QLabel();
-        self.table.setColumnWidth(0, 120)
-        self.table.setColumnWidth(1, 120)
+       
         self.rTextButton = QPushButton("T-Student Coincidencia")
         self.rButton = QPushButton("T-Student")
         self.cb = QComboBox()
@@ -42,15 +41,22 @@ class TStudentView(QWidget):
         
 
         self.textbox = QLineEdit(self)
-        self.textbox.resize(280,40)
+       
+
+        self.textPvalue= QLineEdit(self)
+       
+        self.textPvalue.setText("0.001")
+        
 
         self.mainLayout.addWidget(self.cb,1,0)
         self.mainLayout.addWidget(self.rButton,1,1)
         self.mainLayout.addWidget(self.textbox,2,0)
         self.mainLayout.addWidget(self.rTextButton,2,1)
+        self.mainLayout.addWidget(self.textPvalue,3,1)
+
+        self.mainLayout.addWidget(self.table,4,0)
         
-        self.mainLayout.addWidget(self.table,3,0)
-        self.mainLayout.addWidget(self.label,3,1)
+        self.mainLayout.addWidget(self.label,4,1)
         self.setLayout(self.mainLayout)
        
         self.table.setAlternatingRowColors(True)
