@@ -1,7 +1,7 @@
 
 
 
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QAction, QTableWidget,QTableWidgetItem,QVBoxLayout,QMenu,QCheckBox,QWidgetAction,QDialogButtonBox,QScrollBar,QPushButton
+from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QAction, QTableWidget,QTableWidgetItem,QVBoxLayout,QMenu,QCheckBox,QWidgetAction,QDialogButtonBox,QScrollBar,QPushButton,QSizePolicy
 
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
@@ -46,6 +46,8 @@ class TStudentView(QWidget):
         self.textPvalue= QLineEdit(self)
        
         self.textPvalue.setText("0.001")
+        self.textPvalue.setSizePolicy(QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed));
+        self.textPvalue.setMinimumWidth(50);
         
 
         self.mainLayout.addWidget(self.cb,1,0)
@@ -76,7 +78,7 @@ class TStudentView(QWidget):
     def populateTableButton(self):
 
         self.label.setText("Total Nº elementos: "+str(self.rController.obtainTotalContains(self.textbox.text().upper().strip(),self.head)))
-        df=self.rController.getTStudentContains( self.textbox.text().upper().strip(),self.head)
+        df=self.rController.getTStudentContains( self.textbox.text().upper().strip(),self.head,self.textPvalue.text())
         self.pandas= PandasModel(df)
         self.table.setModel(self.pandas)
 

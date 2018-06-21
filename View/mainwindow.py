@@ -241,7 +241,7 @@ class MainWindow(QMainWindow):
 
     def launchStudentView (self):
          
-        self.rule=TStudentView(self.mainController.obtainControllerRule(),"MARCA Y MODELO")
+        self.tstu=TStudentView(self.mainController.obtainControllerRule(),"MARCA Y MODELO")
 
           
         

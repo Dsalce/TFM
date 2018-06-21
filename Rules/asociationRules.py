@@ -105,22 +105,22 @@ class Rules(object):
         self.df=df
 
  
-  def tStudentDataSet(self,param,head):
+  def tStudentDataSet(self,param,head,textPValue):
      rules=self.defectsDataSet(param,head)
      if(not rules.empty ):
-      return self.obtainTStudent(rules)
+      return self.obtainTStudent(rules,textPValue)
      else:return rules
 
 
-  def tStudentDataSetContains(self,param,head):
+  def tStudentDataSetContains(self,param,head,textPValue):
     rules=self.defectsContainsDataSet(param,head)
     if( not rules.empty ):
-     return self.obtainTStudent(rules)
+     return self.obtainTStudent(rules,textPValue)
     else: return rules
     
     
 
-  def obtainTStudent(self,rules):
+  def obtainTStudent(self,rules,textPValue):
 
 
     lComb=self.combinatoriaInspector()
@@ -129,15 +129,22 @@ class Rules(object):
     lRulesX=[]
     lRulesY=[]
     lXTStudent=[]
+    lXKTest=[]
     lYTStudent=[]
+    lYKTest=[]
     tstudent=pd.DataFrame()
     
      
     for ins in lComb:
       i=0
-     
+      
       insList0 = (self.df[(self.df["INS"]==ins[0]) ].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
-      insList1 = (self.df[(self.df["INS"]==ins[1]) ].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
+      if(ins[1]=="all"):
+        insList1 = (self.df.groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
+        
+      else:
+        insList1 = (self.df[(self.df["INS"]==ins[1]) ].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
+
       insList0 = insList0.applymap(self.encode_units)
       insList1 = insList1.applymap(self.encode_units)
       
@@ -149,39 +156,49 @@ class Rules(object):
           
           if(X in insList0 and X in insList1 and Y in insList0 and Y in insList1):
            #tstudentX=stats.ttest_ind(stat.mean(insList0[X]),stat.mean(insList1[X]))
-           tstudentX=stats.ttest_ind(insList0[X],insList1[X])
+           tstudentX=stats.ttest_ind(insList0[X],insList1[X],equal_var = False)
+           XkTest=stats.ks_2samp(insList0[X],insList1[X])
 
            #tstudentY=stats.ttest_ind(stat.mean(self.calculoTStudentY(insList0,Y,X)),stat.mean(self.calculoTStudentY(insList1,Y,X)))
-           tstudentY=stats.ttest_ind(self.calculoTStudentY(insList0,Y,X),self.calculoTStudentY(insList1,Y,X))
+           tstudentY=stats.ttest_ind(self.calculoTStudentY(insList0,Y,X),self.calculoTStudentY(insList1,Y,X),equal_var = False)
+           YkTest=stats.ks_2samp(self.calculoTStudentY(insList0,Y,X),self.calculoTStudentY(insList1,Y,X))
+
            #print(stat.mean(self.calculoTStudentY(insList0,Y,X)))
            #print(stat.mean(self.calculoTStudentY(insList1,Y,X)))
-           lIns0.append(float(ins[0]))
-           lIns1.append(float(ins[1]))
-           lRulesX.append(float(X))
-           lRulesY.append(float(Y))
-           lXTStudent.append(tstudentX)
-           lYTStudent.append(tstudentY)
+           if(tstudentX[1] <float(textPValue) or tstudentY[1] <float(textPValue)):
+            lIns0.append(ins[0])
+            lIns1.append(ins[1])
+            lRulesX.append(X)
+            lRulesY.append(Y)
+            lXTStudent.append(tstudentX[1])
+            lXKTest.append(XkTest[1])
+            lYTStudent.append(tstudentY[1])
+            lYKTest.append(YkTest[1])
            
           i+=1
-
+    
         
     tstudent["Inspector1"]=lIns0
     tstudent["Inspector2"]=lIns1
     tstudent["ReglaX"]=lRulesX
     tstudent["ReglaY"]=lRulesY
     tstudent["XT-Student"]=lXTStudent
+    tstudent["X-Kolmogorov-Smirnov"]=lXKTest
     tstudent["YT-Student"]=lYTStudent
+    tstudent["Y-Kolmogorov-Smirnov"]=lYKTest
     return tstudent
 
   def combinatoriaInspector(self): 
 
      i=1
      l=list(pd.unique(self.df["INS"]))
+     l.append("all")
      lComb=[]
      for ins in l:
        for j in range(i,len(l)):
          lComb.append((ins,l[j]))
        i+=1 
+
      return lComb
 
   def calculoTStudentY(self,insList,Y,X):

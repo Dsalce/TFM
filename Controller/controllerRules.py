@@ -41,12 +41,12 @@ class RulesController(object):
 
 
       #Gets the rules filtered by the header and the parameter
-      def getTStudent(self,param,header):
+      def getTStudent(self,param,header,textPvalue):
         
-          return self.rules.tStudentDataSet(param,header)
+          return self.rules.tStudentDataSet(param,header,textPvalue)
 
       #Gets the rules filtered by the header and the contains parameter
-      def getTStudentContains(self,param,header):
+      def getTStudentContains(self,param,header,textPvalue):
         
-          return self.rules.tStudentDataSetContains(param,header)
+          return self.rules.tStudentDataSetContains(param,header,textPvalue)
 
