@@ -26,8 +26,9 @@ class TStudentView(QWidget):
 
         self.rController=controller
         self.table = QTableView()
-        self.label= QLabel();
-       
+        self.label= QLabel()
+        self.table.setColumnWidth(0, 120)
+        self.table.setColumnWidth(1, 200)
         self.rTextButton = QPushButton("T-Student Coincidencia")
         self.rButton = QPushButton("T-Student")
         self.cb = QComboBox()

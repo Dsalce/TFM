@@ -108,19 +108,19 @@ class Rules(object):
   def tStudentDataSet(self,param,head,textPValue):
      rules=self.defectsDataSet(param,head)
      if(not rules.empty ):
-      return self.obtainTStudent(rules,textPValue)
+      return self.obtainTStudent(rules,textPValue,param,head,False)
      else:return rules
 
 
   def tStudentDataSetContains(self,param,head,textPValue):
     rules=self.defectsContainsDataSet(param,head)
     if( not rules.empty ):
-     return self.obtainTStudent(rules,textPValue)
+     return self.obtainTStudent(rules,textPValue,param,head,True)
     else: return rules
     
     
 
-  def obtainTStudent(self,rules,textPValue):
+  def obtainTStudent(self,rules,textPValue,param,head,contains):
 
 
     lComb=self.combinatoriaInspector()
@@ -137,13 +137,23 @@ class Rules(object):
      
     for ins in lComb:
       i=0
-      
-      insList0 = (self.df[(self.df["INS"]==ins[0]) ].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
-      if(ins[1]=="all"):
-        insList1 = (self.df.groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
+      if(contains):
+        insList0 = (self.df[(self.df["INS"]==ins[0]) & (self.df[head].str.contains(param))].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
         
+        if(ins[1]=="all"):
+          insList1 = (self.df[self.df[head].str.contains(param)].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
+        else:
+          insList1 = (self.df[(self.df["INS"]==ins[1])& (self.df[head].str.contains(param)) ].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
+
+
       else:
-        insList1 = (self.df[(self.df["INS"]==ins[1]) ].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
+         insList0 = (self.df[(self.df["INS"]==ins[0]) & (self.df[head]==param)].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
+         if(ins[1]=="all"):
+           insList1 = (self.df[self.df[head]==param].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
+         else:
+          insList1 = (self.df[(self.df["INS"]==ins[1]) & (self.df[head]==param) ].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
+
+
 
       insList0 = insList0.applymap(self.encode_units)
       insList1 = insList1.applymap(self.encode_units)
@@ -160,14 +170,18 @@ class Rules(object):
            XkTest=stats.ks_2samp(insList0[X],insList1[X])
 
            #tstudentY=stats.ttest_ind(stat.mean(self.calculoTStudentY(insList0,Y,X)),stat.mean(self.calculoTStudentY(insList1,Y,X)))
-           tstudentY=stats.ttest_ind(self.calculoTStudentY(insList0,Y,X),self.calculoTStudentY(insList1,Y,X),equal_var = False)
-           YkTest=stats.ks_2samp(self.calculoTStudentY(insList0,Y,X),self.calculoTStudentY(insList1,Y,X))
+           auxL0=self.calculoTStudentY(insList0,Y,X)
+           auxL1=self.calculoTStudentY(insList1,Y,X)
+           tstudentY=stats.ttest_ind(auxL0,auxL1,equal_var = False)
+           YkTest=stats.ks_2samp(auxL0,auxL1)
 
            #print(stat.mean(self.calculoTStudentY(insList0,Y,X)))
            #print(stat.mean(self.calculoTStudentY(insList1,Y,X)))
            if(tstudentX[1] <float(textPValue) or tstudentY[1] <float(textPValue)):
-            lIns0.append(ins[0])
-            lIns1.append(ins[1])
+            
+            lIns0.append(ins[0]+"("+str(len(insList0[X]))+"/"+str(list(insList0[X]).count(1))+"/"+str(auxL0.count(1))+")")
+            
+            lIns1.append(ins[1]+"("+str(len(insList1[X]))+"/"+str(list(insList1[X]).count(1))+"/"+str(auxL1.count(1))+")")
             lRulesX.append(X)
             lRulesY.append(Y)
             lXTStudent.append(tstudentX[1])
@@ -178,8 +192,8 @@ class Rules(object):
           i+=1
     
         
-    tstudent["Inspector1"]=lIns0
-    tstudent["Inspector2"]=lIns1
+    tstudent["Inspector1(NTotalCoches/X/Y)"]=lIns0
+    tstudent["Inspector2(NTotalCoches/X/Y)"]=lIns1
     tstudent["ReglaX"]=lRulesX
     tstudent["ReglaY"]=lRulesY
     tstudent["XT-Student"]=lXTStudent
@@ -203,11 +217,14 @@ class Rules(object):
 
   def calculoTStudentY(self,insList,Y,X):
      j=0
+     
      auxList=[]
      for val in insList[X]:
         if( val==1 and  insList[Y][j]==1):
             auxList.append(1)
+            
         elif(val==1 and  insList[Y][j]==0):
             auxList.append(0)
+          
         j+=1
      return auxList

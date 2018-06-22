@@ -24,8 +24,11 @@ class PandasModel(QAbstractTableModel):
             if role == Qt.DisplayRole:
                if( isinstance(self._data.values[index.row()][index.column()], float)) :
                    return str(self._data.values[index.row()][index.column()])
-               else :
+               elif (isinstance(self._data.values[index.row()][index.column()], str)):
+                  return str(self._data.values[index.row()][index.column()])
+               else:
                   return str(list(self._data.values[index.row()][index.column()]))
+
         return None
     def getData(self):
        return self._data
