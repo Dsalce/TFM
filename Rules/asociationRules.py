@@ -120,6 +120,18 @@ class Rules(object):
     
     
 
+  def color_negative_red(self,val):
+    """
+    Takes a scalar and returns a string with
+    the css property `'color: red'` for negative
+    strings, black otherwise.
+    """
+    print(val)
+    print(self.pvalue)
+    color = 'black' if float(val)< float(self.pvalue) else 'red'
+    return 'color: %s' % color
+
+
   def obtainTStudent(self,rules,textPValue,param,head,contains):
 
 
@@ -133,25 +145,26 @@ class Rules(object):
     lYTStudent=[]
     lYKTest=[]
     tstudent=pd.DataFrame()
+    self.pvalue=textPValue
     
-     
+    
     for ins in lComb:
       i=0
       if(contains):
-        insList0 = (self.df[(self.df["INS"]==ins[0]) & (self.df[head].str.contains(param))].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
+        insList1 = (self.df[(self.df["INS"]==ins[1]) & (self.df[head].str.contains(param))].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
         
-        if(ins[1]=="all"):
-          insList1 = (self.df[self.df[head].str.contains(param)].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
+        if(ins[0]=="all"):
+          insList0 = (self.df[(self.df["INS"]!=ins[1])&(self.df[head].str.contains(param))].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
         else:
-          insList1 = (self.df[(self.df["INS"]==ins[1])& (self.df[head].str.contains(param)) ].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
+          insList0 = (self.df[(self.df["INS"]==ins[0])& (self.df[head].str.contains(param)) ].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
 
 
       else:
-         insList0 = (self.df[(self.df["INS"]==ins[0]) & (self.df[head]==param)].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
-         if(ins[1]=="all"):
-           insList1 = (self.df[self.df[head]==param].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
+         insList1 = (self.df[(self.df["INS"]==ins[1]) & (self.df[head]==param)].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
+         if(ins[0]=="all"):
+           insList0 = (self.df[(self.df["INS"]!=ins[1])&(self.df[head]==param)].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
          else:
-          insList1 = (self.df[(self.df["INS"]==ins[1]) & (self.df[head]==param) ].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
+          insList0= (self.df[(self.df["INS"]==ins[0]) & (self.df[head]==param) ].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
 
 
 
@@ -165,18 +178,15 @@ class Rules(object):
           Y=(list(rules["consequents"][i])[0])
           
           if(X in insList0 and X in insList1 and Y in insList0 and Y in insList1):
-           #tstudentX=stats.ttest_ind(stat.mean(insList0[X]),stat.mean(insList1[X]))
            tstudentX=stats.ttest_ind(insList0[X],insList1[X],equal_var = False)
            XkTest=stats.ks_2samp(insList0[X],insList1[X])
 
-           #tstudentY=stats.ttest_ind(stat.mean(self.calculoTStudentY(insList0,Y,X)),stat.mean(self.calculoTStudentY(insList1,Y,X)))
            auxL0=self.calculoTStudentY(insList0,Y,X)
            auxL1=self.calculoTStudentY(insList1,Y,X)
            tstudentY=stats.ttest_ind(auxL0,auxL1,equal_var = False)
            YkTest=stats.ks_2samp(auxL0,auxL1)
 
-           #print(stat.mean(self.calculoTStudentY(insList0,Y,X)))
-           #print(stat.mean(self.calculoTStudentY(insList1,Y,X)))
+          
            if(tstudentX[1] <float(textPValue) or tstudentY[1] <float(textPValue)):
             
             lIns0.append(ins[0]+"("+str(len(insList0[X]))+"/"+str(list(insList0[X]).count(1))+"/"+str(auxL0.count(1))+")")
@@ -200,13 +210,17 @@ class Rules(object):
     tstudent["X-Kolmogorov-Smirnov"]=lXKTest
     tstudent["YT-Student"]=lYTStudent
     tstudent["Y-Kolmogorov-Smirnov"]=lYKTest
+    tstudent.style.applymap(self.color_negative_red())
     return tstudent
 
   def combinatoriaInspector(self): 
 
      i=1
-     l=list(pd.unique(self.df["INS"]))
+     l=[]
      l.append("all")
+
+     l.extend(list(pd.unique(self.df["INS"])))
+     
      lComb=[]
      for ins in l:
        for j in range(i,len(l)):

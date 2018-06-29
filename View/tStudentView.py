@@ -74,6 +74,7 @@ class TStudentView(QWidget):
         
         self.pandas= PandasModel(df)
         self.table.setModel(self.pandas)
+
         self.table.update()
 
     def populateTableButton(self):
@@ -81,6 +82,7 @@ class TStudentView(QWidget):
         self.label.setText("Total Nº elementos: "+str(self.rController.obtainTotalContains(self.textbox.text().upper().strip(),self.head)))
         df=self.rController.getTStudentContains( self.textbox.text().upper().strip(),self.head,self.textPvalue.text())
         self.pandas= PandasModel(df)
+        
         self.table.setModel(self.pandas)
 
 
