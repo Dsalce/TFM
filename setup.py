@@ -1,10 +1,14 @@
 #Comandos py.exe setup.py build
 #Copiar la carpeta images y los dll tcl86t.dll,tk86t.dll al build(borrar los anteriores)
+#Renombrar cKDTree.cp36-win_amd64 a ckdtree.cp36-win_amd64
+
+
 
 import sys
 from cx_Freeze import setup, Executable
 from sys import path
 import tkinter
+import scipy
 import os
 
 os.environ['TCL_LIBRARY'] = "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\Python36_64\\DLLs\\tcl86t.dll"

@@ -120,16 +120,7 @@ class Rules(object):
     
     
 
-  def color_negative_red(self,val):
-    """
-    Takes a scalar and returns a string with
-    the css property `'color: red'` for negative
-    strings, black otherwise.
-    """
-    print(val)
-    print(self.pvalue)
-    color = 'black' if float(val)< float(self.pvalue) else 'red'
-    return 'color: %s' % color
+ 
 
 
   def obtainTStudent(self,rules,textPValue,param,head,contains):
@@ -188,10 +179,21 @@ class Rules(object):
 
           
            if(tstudentX[1] <float(textPValue) or tstudentY[1] <float(textPValue)):
+            rat0X=0
+            rat0Y=0
+            rat1X=0
+            rat1Y=0
+
+            if(list(insList0[X]).count(1)!=0): rat0X=round(len(insList0[X])/list(insList0[X]).count(1),2)
+            if(auxL0.count(1)!=0): rat0Y=round(list(insList0[X]).count(1)/auxL0.count(1),2)
+            if(list(insList1[X]).count(1)!=0): rat1X=round(len(insList1[X])/list(insList1[X]).count(1),2)
+            if(auxL1.count(1)!=0): rat1Y=round(list(insList1[X]).count(1)/auxL1.count(1),2)
+
+            lIns0.append(ins[0]+"("+str(len(insList0[X]))+"/"+str(list(insList0[X]).count(1))+"("+str(rat0X)+")"+"/"+str(auxL0.count(1))+"("+ str(rat0Y) +")"+")")
+
             
-            lIns0.append(ins[0]+"("+str(len(insList0[X]))+"/"+str(list(insList0[X]).count(1))+"/"+str(auxL0.count(1))+")")
-            
-            lIns1.append(ins[1]+"("+str(len(insList1[X]))+"/"+str(list(insList1[X]).count(1))+"/"+str(auxL1.count(1))+")")
+            lIns1.append(ins[1]+"("+str(len(insList1[X]))+"/"+str(list(insList1[X]).count(1))+"("+str(rat1X) +")"+"/"+str(auxL1.count(1))+"("+ str(rat1Y) +")"+")")
+
             lRulesX.append(X)
             lRulesY.append(Y)
             lXTStudent.append(tstudentX[1])
@@ -202,15 +204,14 @@ class Rules(object):
           i+=1
     
         
-    tstudent["Inspector1(NTotalCoches/X/Y)"]=lIns0
-    tstudent["Inspector2(NTotalCoches/X/Y)"]=lIns1
+    tstudent["Inspector1(NTotalCoches/X(RatioX)/Y(RatioY))"]=lIns0
+    tstudent["Inspector2(NTotalCoches/X(RatioX)/Y(RatioY))"]=lIns1
     tstudent["ReglaX"]=lRulesX
     tstudent["ReglaY"]=lRulesY
     tstudent["XT-Student"]=lXTStudent
     tstudent["X-Kolmogorov-Smirnov"]=lXKTest
     tstudent["YT-Student"]=lYTStudent
     tstudent["Y-Kolmogorov-Smirnov"]=lYKTest
-    tstudent.style.applymap(self.color_negative_red())
     return tstudent
 
   def combinatoriaInspector(self): 

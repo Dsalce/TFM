@@ -9,9 +9,12 @@ import pandas as pd
 
 class PandasModel(QAbstractTableModel):
     
-    def __init__(self, data, parent=None):
+    def __init__(self, data,pvalue, parent=None):
         QAbstractTableModel.__init__(self, parent)
         self._data = data
+        self.pvalue=pvalue
+        self.paint=True
+        self.insf="all"
 
     def rowCount(self, parent=None):
         return len(self._data.values)
@@ -20,6 +23,7 @@ class PandasModel(QAbstractTableModel):
         return self._data.columns.size
 
     def data(self, index, role=Qt.DisplayRole):
+
         if index.isValid():
             if role == Qt.DisplayRole:
                if( isinstance(self._data.values[index.row()][index.column()], float)) :
@@ -28,7 +32,24 @@ class PandasModel(QAbstractTableModel):
                   return str(self._data.values[index.row()][index.column()])
                else:
                   return str(list(self._data.values[index.row()][index.column()]))
+            if role==Qt.BackgroundColorRole:
+              if(index.column()!=0 and index.column()!=1 and (float(self.pvalue)>float(self._data.values[index.row()][index.column()])) ):	
+             
+                   return QVariant(QColor(Qt.red))
+              elif(index.column()==0 ):
+                 
+                  ins=str(self._data.values[index.row()][index.column()]).split("(")
+                  
+                  if(self.insf!=ins[0]):
+                      self.paint=not(self.paint)
+                  self.insf=ins[0]
 
+              if(self.paint==True):
+                 return QVariant(QColor(0, 255, 255,127))
+
+              
+                      
+              
         return None
     def getData(self):
        return self._data
