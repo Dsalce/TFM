@@ -63,7 +63,7 @@ class RulesTableView(QWidget):
         self.label.setText(str(self.rController.obtainTotal(self.cb.currentText().strip(),self.head)))
         df=self.rController.getDataSet( self.cb.currentText().strip(),self.head)
         
-        self.pandas= PandasModel(df)
+        self.pandas= PandasModel(df,None)
         
         self.table.setModel(self.pandas)
         self.table.update()
@@ -72,7 +72,7 @@ class RulesTableView(QWidget):
 
         self.label.setText("Total Nº elementos: "+str(self.rController.obtainTotalContains(self.textbox.text().upper().strip(),self.head)))
         df=self.rController.getDataSetContains( self.textbox.text().upper().strip(),self.head)
-        self.pandas= PandasModel(df)
+        self.pandas= PandasModel(df,None)
         
         self.table.setModel(self.pandas)
         self.table.update()

@@ -32,8 +32,8 @@ class PandasModel(QAbstractTableModel):
                   return str(self._data.values[index.row()][index.column()])
                else:
                   return str(list(self._data.values[index.row()][index.column()]))
-            if role==Qt.BackgroundColorRole:
-              if(index.column()!=0 and index.column()!=1 and (float(self.pvalue)>float(self._data.values[index.row()][index.column()])) ):	
+            if role==Qt.BackgroundColorRole and self.pvalue!=None:
+              if(index.column()!=0 and index.column()!=1   and (float(self.pvalue)>float(self._data.values[index.row()][index.column()])) ):	
              
                    return QVariant(QColor(Qt.red))
               elif(index.column()==0 ):
