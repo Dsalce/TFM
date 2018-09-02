@@ -1,6 +1,7 @@
-# TFM
+#TFM
 
-Proyecto final de master 
+
+###DETECCIÓN DE ANOMALÍAS EN DATOS DE INSPECCIÓN DE VEHÍCULOS###
 
 El objetivo de este TFM ha sido desarrollar una aplicación que sea capaz de obtener la información necesaria para discernir 
 si una inspección de ITV tiene anomalías en sus resultados o no a partir de una fuente de datos introducida por texto o Excel.
@@ -21,6 +22,12 @@ asegurar que las anomalías detectadas son estadísticamente significativas.
 Este método ha sido implementado en una herramienta disponible que puede ser empleada 
 por entidades de inspección de ITVs como ENAC.
 
+------------------------------------------------------------------------------------------------
+Los ficheros no se incluyen en el proyecto se proporcionan aparte, con el objetivo de cumplir con la RGPD.
 
+El link que se proporciona debajo es del ejecutable de windows si se quiere ejecutar en otras plataformas es necesario
+bajar los fuentes e instalar las referencias de las librerias.
+
+El punto de entrada a la aplicacion esta en la carpeta Model y la clase main es "DeteccionAnomaliasItv.py"
 
 link descarga :https://drive.google.com/open?id=1LITAwPfk1SAeI_TDTOe1N5Qiae7siHX3
