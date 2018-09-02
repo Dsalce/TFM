@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-import numpy as np
 
-
+"""View class Histogram  """
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QSizePolicy, QMessageBox, QWidget, QPushButton
 from PyQt5.QtGui import QIcon
@@ -24,7 +24,7 @@ import matplotlib.pyplot as plt
 class Histogram(QWidget):
     
     
-    
+    #Create a histogram
     def __init__(self, contro,header):
         super().__init__()
         self.controller=contro
@@ -42,7 +42,8 @@ class Histogram(QWidget):
         self.cb = QComboBox()
         self.button = QPushButton("Calcula Histograma")
         self.rTextButton = QPushButton("Calcula Histograma Coincidencia")
-
+        
+        #Populate the combobox with the models of vehicles
         if(self.controller.obtainHistoHeader(self.head)!=None):
          self.cb.addItems([str(i) for i in self.controller.obtainHistoHeader(self.head)])
          self.button.clicked.connect(self.populateHisto)
@@ -74,14 +75,15 @@ class Histogram(QWidget):
 
    
     
-
+    #Populate the histogram with equal parameters
     def populateHisto(self):
-        data=self.controller.obtainHisto( self.cb.currentText().strip(),False)
+        data=self.controller.obtainHisto( self.cb.currentText().upper().strip(),False)
         
         self.sc.compute_initial_figure(data)
         
         self.mainLayout.update()
 
+    #Populate the histogram with coincidence parameters
     def populateContainsHisto(self):
         data=self.controller.obtainHisto( self.textbox.text().upper().strip(),True)
         
@@ -93,7 +95,7 @@ class Histogram(QWidget):
         
    
      
-        
+# Private class to create the histogram        
 class MyMplCanvas(FigureCanvas):
  
     def __init__(self,parent=None,width=5, height=4, dpi=100,data=None):
@@ -116,7 +118,8 @@ class MyMplCanvas(FigureCanvas):
         
     def compute_initial_figure(self):
         pass
-
+        
+# Private class to create the histogram  
 class MyStaticMplCanvas(MyMplCanvas):
  
     def compute_initial_figure(self,data):

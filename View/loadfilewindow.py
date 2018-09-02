@@ -1,9 +1,13 @@
+
+"""View class to lad files"""
+
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog,QMessageBox , QLineEdit, QFileDialog
 from PyQt5.QtGui import QIcon
  
 class LoadFileWindow(QWidget):
     
+    #Constructor
     def __init__(self,controller):
         super().__init__()
         self.errFile=0
@@ -23,7 +27,8 @@ class LoadFileWindow(QWidget):
         
  
         self.show()
- 
+
+    #Load the files
     def openFileNameDialog(self):    
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog

@@ -82,7 +82,7 @@ class ParserTXT(Parser):
            ini=fin+1
            i=i+1
    
-    #main method to parse the file
+    # Main method to parse the file
     def loadFile(self,file,itv):
      
      j=0    

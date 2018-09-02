@@ -1,9 +1,14 @@
+
+"""View class of the tree of defects"""
+
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 import sys
 
 class TreeView(QWidget):
+
+    #Constructor
     def __init__(self,cTree):
         super().__init__()
         self.cTree=cTree
@@ -15,7 +20,8 @@ class TreeView(QWidget):
  
         
         self.initUI()
- 
+        
+    #Create the tree of defects
     def initUI(self):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)

@@ -1,5 +1,5 @@
 
-
+"""View class test statistic    """
 
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QAction, QTableWidget,QTableWidgetItem,QVBoxLayout,QMenu,QCheckBox,QWidgetAction,QDialogButtonBox,QScrollBar,QPushButton,QSizePolicy
 
@@ -11,9 +11,11 @@ from View.pandasModel import *
  
 class TStudentView(QWidget):
 
+
+    #Constructor
     def __init__(self,controller,header):
         super().__init__()
-        self.title = 'T-Student'
+        self.title = 'Test estadisticos'
         self.left = 50
         self.top = 50
         self.width = 1200
@@ -29,9 +31,10 @@ class TStudentView(QWidget):
         self.label= QLabel()
         self.table.setColumnWidth(0, 120)
         self.table.setColumnWidth(1, 200)
-        self.rTextButton = QPushButton("T-Student Coincidencia")
-        self.rButton = QPushButton("T-Student")
+        self.rTextButton = QPushButton("Test coincidencia")
+        self.rButton = QPushButton("Test combobox")
         self.cb = QComboBox()
+        #Populate combobox
         if(self.rController!=None):
          self.cb.addItems(self.rController.obtainListHeader(self.head))
          self.rButton.clicked.connect(self.populateTable)
@@ -67,9 +70,9 @@ class TStudentView(QWidget):
         self.show()
 
 
-     
+    #Populate the table of test associated with the combobox
     def populateTable(self):
-        self.label.setText(str(self.rController.obtainTotal(self.cb.currentText().strip(),self.head)))
+        self.label.setText("Total Nº elementos: "+str(self.rController.obtainTotal(self.cb.currentText().upper().strip(),self.head)))
         df=self.rController.getTStudent( self.cb.currentText().strip(),self.head,self.textPvalue.text())
         
         self.pandas= PandasModel(df,self.textPvalue.text())
@@ -77,6 +80,7 @@ class TStudentView(QWidget):
      
         self.table.update()
 
+    #Populate the table of test associated with the textfield
     def populateTableButton(self):
 
         self.label.setText("Total Nº elementos: "+str(self.rController.obtainTotalContains(self.textbox.text().upper().strip(),self.head)))

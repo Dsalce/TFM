@@ -28,14 +28,16 @@ class RulesController(object):
       def setRules(self,rule):
           
           self.rules.setPandas(rule)
+
       #Obtain the list of GRUP
       def obtainListHeader(self,header):
       	return self.rules.obtainListHeader(header)
 
-
+      #Obtain the number of element affected by the rule with coincidence of the word
       def obtainTotal(self,param,head):
           return self.rules.lenDataset(param,head)
 
+      #Obtain the number of element affected by the rule with equal parameters
       def obtainTotalContains(self,param,head):
           return self.rules.lenContainsDataset(param,head)
 

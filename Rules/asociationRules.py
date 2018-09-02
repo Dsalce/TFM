@@ -26,6 +26,7 @@ class Rules(object):
         return 0
     if x >= 1:
         return 1
+
   #Obtain the list of the header
   def obtainListHeader(self,header):
 
@@ -34,17 +35,18 @@ class Rules(object):
   
 
  
-  #Obtain association rule with contains
+  #Obtain association rule with contains param
   def defectsContainsDataSet(self,param,head):
      
      basket_sets = (self.df[self.df[head].str.contains(param)].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
      if(not basket_sets.empty):
-    
+      
       basket_sets = basket_sets.applymap(self.encode_units)
+      #Apriori algorithm
       frequent_itemsets = apriori(basket_sets,min_support=0.05, use_colnames=True)
       
       rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1)
-
+      #Add the elements affected by the rule
       return self.addNumberRules(rules,self.lenConData)
      else:
        return pd.DataFrame()
@@ -54,33 +56,37 @@ class Rules(object):
   def defectsDataSet(self,param,head):
      
     basket_sets = (self.df[self.df[head]==param].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
+  
     if(not basket_sets.empty):
+
      basket_sets = basket_sets.applymap(self.encode_units)
-     
+     #Apriori algorithm
      frequent_itemsets = apriori(basket_sets,min_support=0.05, use_colnames=True)
      
 
      rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1)
-     
+     #Add the elements affected by the rule
      return self.addNumberRules(rules,self.lenData)
     else:
        return pd.DataFrame()
 
 
 
-
+  #Calculate the number of elements affected by the rule
   def addNumberRules(self,rules,lenD):
      
      if len(rules)!=0 :
        l=[]
        auxlist=[]
+
        for  k in  range(len(rules["support"])):
            l.append(lenD)
+       #multiplication of the support with the confident and the number of elements
        auxlist=list(map(operator.mul, list(map(operator.mul, rules["support"], rules["confidence"])),l))
        l=[]
       
        for  rule in   auxlist:
-         
+          # smoothing  numbers of the list
           l.append(round( rule,2))
 
        rules["Nº de elementos"]=l
@@ -89,7 +95,7 @@ class Rules(object):
      else:
        return pd.DataFrame()
 
-  
+  # length of the column of inspection
   def lenDataset(self,param,head):
      self.lenData=len(self.df[self.df[head]==param].groupby([ "INSPECCION"]).nunique())
      return self.lenData
@@ -104,14 +110,14 @@ class Rules(object):
 
         self.df=df
 
- 
+  #Obtain the test with equals parameters
   def tStudentDataSet(self,param,head,textPValue):
      rules=self.defectsDataSet(param,head)
      if(not rules.empty ):
       return self.obtainTStudent(rules,textPValue,param,head,False)
      else:return rules
 
-
+   #Obtain the test with coincidences
   def tStudentDataSetContains(self,param,head,textPValue):
     rules=self.defectsContainsDataSet(param,head)
     if( not rules.empty ):
@@ -122,7 +128,7 @@ class Rules(object):
 
  
 
-
+  # Calculate the table of test
   def obtainTStudent(self,rules,textPValue,param,head,contains):
 
 
@@ -138,10 +144,12 @@ class Rules(object):
     tstudent=pd.DataFrame()
     self.pvalue=textPValue
     
-    
+    #Obtain the dataset of the  inspectors compared
     for ins in lComb:
       i=0
       if(contains):
+        #This is to use contains with pandas, it obtains the list of rules per inspector
+
         insList1 = (self.df[(self.df["INS"]==ins[1]) & (self.df[head].str.contains(param))].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
         
         if(ins[0]=="all"):
@@ -151,6 +159,7 @@ class Rules(object):
 
 
       else:
+
          insList1 = (self.df[(self.df["INS"]==ins[1]) & (self.df[head]==param)].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
          if(ins[0]=="all"):
            insList0 = (self.df[(self.df["INS"]!=ins[1])&(self.df[head]==param)].groupby(["DEFEC.", "INSPECCION"])["DEFEC."].count().unstack(level=0).fillna(0))
@@ -162,28 +171,34 @@ class Rules(object):
       insList0 = insList0.applymap(self.encode_units)
       insList1 = insList1.applymap(self.encode_units)
       
-      
+      #Iterate the antecedents of the rule
       for X in rules["antecedants"]:
-          
+          #Part X and part Y of the rule
           X=(list(X)[0])
           Y=(list(rules["consequents"][i])[0])
           
+          # if X and Y is in the rules of the inspector
           if(X in insList0 and X in insList1 and Y in insList0 and Y in insList1):
+
+           #Statistic test t-Student and Kolmogorov with the X
            tstudentX=stats.ttest_ind(insList0[X],insList1[X],equal_var = False)
            XkTest=stats.ks_2samp(insList0[X],insList1[X])
-
+           
+           #Statistic test t-Student and Kolmogorov with the Y
            auxL0=self.calculoTStudentY(insList0,Y,X)
            auxL1=self.calculoTStudentY(insList1,Y,X)
            tstudentY=stats.ttest_ind(auxL0,auxL1,equal_var = False)
            YkTest=stats.ks_2samp(auxL0,auxL1)
 
-          
+           
            if(tstudentX[1] <float(textPValue) or tstudentY[1] <float(textPValue)):
+
+            #Format the values to populate the table
             rat0X=0
             rat0Y=0
             rat1X=0
             rat1Y=0
-
+            
             if(list(insList0[X]).count(1)!=0): rat0X=round(len(insList0[X])/list(insList0[X]).count(1),2)
             if(auxL0.count(1)!=0): rat0Y=round(list(insList0[X]).count(1)/auxL0.count(1),2)
             if(list(insList1[X]).count(1)!=0): rat1X=round(len(insList1[X])/list(insList1[X]).count(1),2)
@@ -203,7 +218,7 @@ class Rules(object):
            
           i+=1
     
-        
+    #Introduce values in the pandas model    
     tstudent["Inspector1(NTotalCoches/X(RatioX)/Y(RatioY))"]=lIns0
     tstudent["Inspector2(NTotalCoches/X(RatioX)/Y(RatioY))"]=lIns1
     tstudent["ReglaX"]=lRulesX
@@ -214,6 +229,7 @@ class Rules(object):
     tstudent["Y-Kolmogorov-Smirnov"]=lYKTest
     return tstudent
 
+  #Calculate the list of inspectors
   def combinatoriaInspector(self): 
 
      i=1
@@ -230,6 +246,8 @@ class Rules(object):
 
      return lComb
 
+
+  #Calculate the Y pat of the test
   def calculoTStudentY(self,insList,Y,X):
      j=0
      

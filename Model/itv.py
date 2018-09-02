@@ -48,7 +48,7 @@ class itv(object):
       
       return stats.mean(lVal)
 
-    #Calculate and populate the defect of the class of inspector
+    #Calculate and populate the defect of the class  inspector
     def calcDefectInspector(self,headerIns,headerDefect,headerGrade):
        i=0
        self.lMean=[]
@@ -79,7 +79,7 @@ class itv(object):
       return  self.inspector[ins].calcMean()
 
 
-    #Calculate and populate the defect of the class of vehicle
+    #Calculate and populate the defect of the class  vehicle
     def calcDefect(self,headerInspection,headerGrup,headerDefect,headerGrade):
        i=0
        defect=self.dic[headerDefect]
@@ -103,7 +103,7 @@ class itv(object):
 
 
        
-    #Return an ordered dictionary of number of defect per number of vehicles
+    #Return an ordered dictionary by number of defect per number of vehicles
     def countNumDefectVehicle(self,typeHeader,contains):
         data=[]
         auxDic={}

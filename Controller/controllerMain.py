@@ -36,20 +36,20 @@ class MainController(object):
         i=file.rfind("/")
         fileName=file[ i+1:]
         try:
-         
+         #Load .txt file
          if("TXT"in file.upper()):
          
           self.file=file
           self.parser=ParserTXT()
           self.createModel(file)
           self.mainWindow.setTitle(fileName)
-         
+         #Load xlsx file
          elif("XLSX" in file.upper()):
           self.file=file
           self.parser=ParserXLSX()
           self.createModel(file)
           self.mainWindow.setTitle(fileName)
-          
+        #Load csv file
          elif("CSV" in file.upper()):
           self.file=file
           self.parser=ParserCSV()
@@ -112,6 +112,6 @@ class MainController(object):
     #Gets the length dictionary
     def lenDic(self):
        return self.itv.lenDic()
-
+    #Update the count of elements in the main window
     def updateTableCount(self,num):
         self.mainWindow.updateTableCount(num,self.itv.lenDic())

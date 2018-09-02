@@ -1,5 +1,5 @@
 
-
+"""View class rules"""
 
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QAction, QTableWidget,QTableWidgetItem,QVBoxLayout,QMenu,QCheckBox,QWidgetAction,QDialogButtonBox,QScrollBar,QPushButton
 
@@ -10,7 +10,8 @@ import pandas as pd
 from View.pandasModel import *
  
 class RulesTableView(QWidget):
-
+    
+    #Constructor
     def __init__(self,controller,header):
         super().__init__()
         self.title = 'Reglas de asociacion'
@@ -32,6 +33,8 @@ class RulesTableView(QWidget):
         self.rTextButton = QPushButton("R.Asociacion Coincidencia")
         self.rButton = QPushButton("R.Asociacion")
         self.cb = QComboBox()
+        
+        #Populate combobox
         if(self.rController!=None):
          self.cb.addItems(self.rController.obtainListHeader(self.head))
          self.rButton.clicked.connect(self.populateTable)
@@ -58,9 +61,9 @@ class RulesTableView(QWidget):
         self.show()
 
 
-     
+     #Populate the table of rules, use it with the combobox
     def populateTable(self):
-        self.label.setText(str(self.rController.obtainTotal(self.cb.currentText().strip(),self.head)))
+        self.label.setText("Total Nº elementos: "+str(self.rController.obtainTotal(self.cb.currentText().upper().strip(),self.head)))
         df=self.rController.getDataSet( self.cb.currentText().strip(),self.head)
         
         self.pandas= PandasModel(df,None)
@@ -68,6 +71,7 @@ class RulesTableView(QWidget):
         self.table.setModel(self.pandas)
         self.table.update()
 
+    #Populate the table of rules use it with the text field
     def populateTableButton(self):
 
         self.label.setText("Total Nº elementos: "+str(self.rController.obtainTotalContains(self.textbox.text().upper().strip(),self.head)))

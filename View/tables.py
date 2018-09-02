@@ -1,5 +1,5 @@
 
-
+"""Table of the Main Mainwindow"""
 
 
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QAction, QTableWidget,QTableWidgetItem,QVBoxLayout,QMenu,QCheckBox,QWidgetAction,QDialogButtonBox,QScrollBar,QPushButton
@@ -14,6 +14,8 @@ from PyQt5.QtWidgets import *
 class TableView(QTableWidget):
 
     mainController=None
+
+    #Constructor
     def __init__(self,controller):
         super().__init__()
         self.mainController=controller
@@ -21,7 +23,7 @@ class TableView(QTableWidget):
         self.horizontalHeader().sectionClicked.connect(self.on_view_horizontalHeader_sectionClicked)
         
  
-
+    # Populate the table with all the data
     def createTable(self):
        # Create table
       
@@ -56,7 +58,7 @@ class TableView(QTableWidget):
         
        
     
-        
+    #Remove the filters of the table     
     def clearFilter(self):
         for i in range(self.rowCount()):
             self.setRowHidden(i, False)
@@ -65,7 +67,7 @@ class TableView(QTableWidget):
  
         
 
-
+    #Create a new filter in the table
     def filterdata(self):
 
         columnsShow = dict([(i, True) for i in range(self.rowCount())])
@@ -90,6 +92,7 @@ class TableView(QTableWidget):
             
         self.mainController.updateTableCount(k)
 
+    #Verification of the state of the checkbox
     def slotSelect(self, state):
         for checkbox in self.checkBoxs:
          if Qt.Checked == state :  
@@ -97,7 +100,7 @@ class TableView(QTableWidget):
          else:
           checkbox.setCheckState(Qt.Unchecked)  
 
-        
+    #Close the filter menu    
     def menuClose(self):
         self.keywords[self.col] = []
         
@@ -110,7 +113,7 @@ class TableView(QTableWidget):
         self.filterdata()
         self.menu.close()
 
-
+    #Create the list of filtering
     def createCheckBoxes(self):
          #Create checkbox
         data_unique = []
@@ -124,7 +127,7 @@ class TableView(QTableWidget):
         self.table.setRowCount(self.rowCount())
        
        
-
+        #Assign the action a create the list of checkbox
         self.checkBoxs = []
         checkBox = QCheckBox("Seleccionar todo", self.menu)
         
@@ -147,7 +150,7 @@ class TableView(QTableWidget):
                     self.checkBoxs.append(it)
                     j=j+1
 
-
+        #Sort the element of the list 
         self.checkBoxs=sorted(self.checkBoxs, key=lambda it: it.text())
        # self.sort(self.checkBoxs[i])
         j=0
@@ -163,6 +166,7 @@ class TableView(QTableWidget):
         checkableAction.setDefaultWidget(self.table)
         self.menu.addAction(checkableAction)
 
+    #Create the action display menu of filtering
     def on_view_horizontalHeader_sectionClicked(self, index):
         
         self.menu = QMenu(self)
@@ -204,7 +208,7 @@ class TableView(QTableWidget):
         self.menu.exec_(QPoint(posX, posY))
        
         
- 
+    #Sort the list
     def sort(self,l):
       i=0
       for i in range( len(l)):

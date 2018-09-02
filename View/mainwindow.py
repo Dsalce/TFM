@@ -1,4 +1,5 @@
 
+"""Main window view"""
 
 from PyQt5.QtWidgets import QApplication, QWidget,QMessageBox 
 
@@ -19,7 +20,7 @@ from View.tStudentView import *
 class MainWindow(QMainWindow):
 
     
-
+    #Constructor
     def __init__(self, controller,app):
         super().__init__()
         self.app=app
@@ -52,6 +53,7 @@ class MainWindow(QMainWindow):
         self.label.setPixmap(self.pixmap)
         
         self.setFixedSize(self.width, self.height)
+        #Only available minimize window or close
         self.setWindowFlags(Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint )
         self.setCentralWidget(self.label) 
         
@@ -59,36 +61,38 @@ class MainWindow(QMainWindow):
         
         self.show()
 
-
+   #Set title
     def setTitle(self,file):
       
       self.setWindowTitle(self.title+"---"+file)
 
     
      
-
+    #Menu of the application
     def menuCreate(self):  
         self.mainMenu = self.menuBar() 
         fileMenu = self.mainMenu.addMenu('Archivo')
 
+        #Load window menu
         loadFile=  QAction(QIcon(), 'Cargar fichero', self)
         loadFile.triggered.connect(self.launchLoadFileWindow)
         fileMenu.addAction(loadFile)
 
+        #Export file
         exportFile=  QAction(QIcon(), 'Exportar fichero', self)
         exportFile.triggered.connect(self.launchExportFileCSV)
         fileMenu.addAction(exportFile)
 
 
-
-
+ 
+        #Ver defectos menu
         treeViewMenu = self.mainMenu.addMenu('Defectos')
         treeViewBotton=  QAction(QIcon(), 'Ver defectos', self)
         treeViewBotton.triggered.connect(self.launchTreeView)
         treeViewMenu.addAction(treeViewBotton)
         
         
-        
+        #Histogram menu
         histoMenu = self.mainMenu.addMenu('Histogramas')
         histoMARCABotton=  QAction(QIcon(), 'Histograma MARCA Y MODELO', self)
         histoGRUPBotton=  QAction(QIcon(), 'Histograma GRUP', self)
@@ -106,7 +110,7 @@ class MainWindow(QMainWindow):
 
 
         
-
+        #Rule menu
         ruleMenu = self.mainMenu.addMenu('Reglas de asociacion')
         ruleGRUPBotton=  QAction(QIcon(), 'Reglas  GRUP', self)
         ruleMARCABotton=  QAction(QIcon(), 'Reglas  MARCA Y MODELO', self)
@@ -121,26 +125,28 @@ class MainWindow(QMainWindow):
         ruleMenu.addAction(ruleCATBotton)
         ruleMenu.addAction(ruleINSBotton)
 
-
-        studentMenu = self.mainMenu.addMenu('T-Student')
-        ruleTStudentBotton=  QAction(QIcon(), 'Calcular T-Student', self)
+        #Test Menu
+        studentMenu = self.mainMenu.addMenu('Test estadísticos')
+        ruleTStudentBotton=  QAction(QIcon(), 'Calcular test', self)
         ruleTStudentBotton.triggered.connect(self.launchStudentView)
         studentMenu.addAction(ruleTStudentBotton)
         
         self.status=QLabel()
         self.statusBar = QStatusBar()
         self.setStatusBar(self.statusBar)
- 
+        
+        #Exit button menu
         exitButton = QAction(QIcon('exit24.png'), 'Exit', self)
         exitButton.setStatusTip('Exit application')
         exitButton.triggered.connect(self.close)
         fileMenu.addAction(exitButton)
-
+    
+    #Update the main count of the table elements
     def updateTableCount(self,num,total):
         self.status.setText("Total : " +str(num)+"/"+str(total))
         self.statusBar.addPermanentWidget(self.status)
-
-    
+ 
+    #Load window action
     def launchLoadFileWindow(self):
        self.setMinimumSize(1,1)
        self.setMaximumSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
@@ -153,8 +159,10 @@ class MainWindow(QMainWindow):
        msg = QMessageBox()
 
        msg.setIcon(QMessageBox.Warning)
-       #msg.setWindowTitle("Error Fichero")
+      
        msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+
+       #If it is an error in load process
        if(0==loadFile.getFileErr()):
            pass
            
@@ -175,7 +183,7 @@ class MainWindow(QMainWindow):
          self.tableView.createTable()
          
 
-
+    #Function to export the table data to a .csv file
     def launchExportFileCSV(self):
           msg = QMessageBox()
           msg.setIcon(QMessageBox.Warning)
@@ -189,56 +197,56 @@ class MainWindow(QMainWindow):
           else:
               msg.setText("Fichero exportado correctamente")
               msg.exec_()
-              
+
+
+
+
+    #Launch the view of defects          
     def launchTreeView(self):
         
-
         self.treeview = TreeView(self.mainController.obtainControllerTree())
         
-          
-          
-          
-        
+    #Launch histogram of GRUP type      
     def launchHistoGRUPView (self):
         
         self.hist=Histogram(self.mainController,"GRUP")
 
+    #Launch histogram of CAT type  
     def launchHistoCATView (self):
         
         self.hist=Histogram(self.mainController,"CAT.")
 
+    #Launch histogram of Model type  
     def launchHistoMARCAView (self):
         
         self.hist=Histogram(self.mainController,"MARCA Y MODELO")
 
-    def launchHistoMARCAView (self):
-        
-        self.hist=Histogram(self.mainController,"MARCA Y MODELO")
-
+    #Launch histogram of Inspector type  
     def launchHistoINSView (self):
         
         self.hist=Histogram(self.mainController,"INS")
 
-
-
+    #Launch rule view of Inspector   
     def launchAsocINSView (self):
         
         self.rule=RulesTableView(self.mainController.obtainControllerRule(),"INS")
 
-
+    #Launch rule view of GRUP
     def launchAsocGRUPView (self):
          
         self.rule=RulesTableView(self.mainController.obtainControllerRule(),"GRUP")
          
-
+    #Launch rule view of Model
     def launchAsocMARCAView (self):
          
         self.rule=RulesTableView(self.mainController.obtainControllerRule(),"MARCA Y MODELO")
 
+    #Launch rule view of Category
     def launchAsocCATView (self):
          
         self.rule=RulesTableView(self.mainController.obtainControllerRule(),"CAT.")
-
+   
+    #Launch the the view
     def launchStudentView (self):
          
         self.tstu=TStudentView(self.mainController.obtainControllerRule(),"MARCA Y MODELO")
